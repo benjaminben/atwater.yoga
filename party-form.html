@@ -57,7 +57,11 @@
     console.log('hello form');
 
     var submits = document.getElementsByClassName('submit'),
-        socket = io(window.location.origin);
+        socket = io('/party');
+
+    socket.on('push', function(data){
+      console.log('push', data)
+    });
 
     for(var i = 0; i < submits.length; i++){
       submits[i].addEventListener('click',  function(e){
@@ -71,6 +75,7 @@
         }
       })
     }
+
   </script>
 </body>
 </html>
