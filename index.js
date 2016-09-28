@@ -25,13 +25,13 @@ io_party_form.on('connection', function(socket) {
 
   socket.on('img', function(data){
     console.log(data);
-    var el = { src: data.src };
+    var el = { type: 'img', src: data.src };
     els.push(el);
     io_party.emit('push', el)
   });
   socket.on('text', function(data){
     console.log(data);
-    var el = { src: data.src };
+    var el = { type: 'text', src: data.src };
     els.push(el);
     io_party.emit('push', el)
   });

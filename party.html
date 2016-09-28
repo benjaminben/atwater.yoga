@@ -18,15 +18,44 @@
   <script>
   var socket = io('/');
 
-  socket.emit('bloobs', {guy : 'bloobs'})
-
   socket.on('push', function(){
     console.log('pushed');
   })
 
   socket.on('push', function(data){
+    conjureEl(data)
     console.log(data);
   });
+
+  function conjureEl(data){
+    switch( data.type ){
+      case 'img':
+        document.body.appendChild(el('img', data.src));
+        break;
+      case 'text':
+        document.body.appendChild(el('p', data.src));
+        break;
+    }
+  }
+
+  function el(type, src){
+    var el = document.createElement(type);
+    switch( type ){
+      case 'img':
+        el.src = src;
+        break;
+      case 'p':
+        el.textContent = src;
+    }
+    el.className = 'item';
+    el.src = src;
+    el.style.maxWidth = '50%';
+    el.style.maxHeight = '50%';
+    el.style.top = el.style.left =
+      Math.random() * 50 + '%';
+
+    return el;
+  }
   </script>
 </body>
 </html>
