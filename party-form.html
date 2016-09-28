@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>party form!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    main {
+      display: flex;
+      height: 100%;
+    }
+    #cont {
+      margin: auto;
+      width: 90%;
+      max-width: 600px;
+    }
+    #cont .section {
+      margin-bottom: 1em;
+    }
+    #cont .section input {
+      display: block;
+      width: 100%;
+
+    }
+    #cont .section .submit {
+      display: block;
+      text-align: center;
+      padding: 20px 10px;
+      max-width: 200px;
+      margin: 1em auto 0;
+      border-radius: 3px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+  <main>
+    <div id="cont">
+      <div class="section">
+        <input id="img_imp" /><span class="submit" data-id="img">submit image (url)</span>
+      </div>
+      <div class="section">
+        <input id="text_imp" /><span class="submit" data-id="text">submit text (lol)</span>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    console.log('hello form');
+
+    var submits = document.getElementsByClassName('submit'),
+        socket = io(window.location.origin);
+
+    for(var i = 0; i < submits.length; i++){
+      submits[i].addEventListener('click',  function(e){
+        switch( e.target.getAttribute('data-id') ){
+          case 'img' :
+            socket.emit('img', {src : 'yo img'});
+            break;
+          case 'text' :
+            socket.emit('text', {src : 'yo text'});
+            break;
+        }
+      })
+    }
+  </script>
+</body>
+</html>
