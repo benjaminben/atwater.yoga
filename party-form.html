@@ -65,9 +65,48 @@
 
     for(var i = 0; i < submits.length; i++){
       submits[i].addEventListener('click',  function(e){
-        var id = e.target.getAttribute('data-id');
-        socket.emit(id, {src : document.getElementById(id + '_imp').value});
+        var id = e.target.getAttribute('data-id'),
+            src = document.getElementById(id + '_imp').value;
+
+
+        socket.emit('el', {html : conjureEl(id, src)})
+
+        // socket.emit(id, {src : document.getElementById(id + '_imp').value});
       })
+    }
+
+
+    function conjureEl(id, src){
+      var type;
+      switch( id ){
+        case 'img':
+          type = 'img';
+          break;
+        case 'text':
+          type = 'p';
+          break;
+      }
+      return alchemy(type, src);
+    }
+
+    function alchemy(type, src){
+      var el = document.createElement(type);
+      switch( type ){
+        case 'img':
+          el.src = src;
+          break;
+        case 'p':
+          el.textContent = src;
+      }
+      el.className = 'item';
+      el.src = src;
+      el.style.maxWidth = '50%';
+      el.style.maxHeight = '50%';
+      el.style.top = Math.random() * 50 + '%';
+      el.style.left = Math.random() * 50 + '%';
+
+      console.log({html: el.outerHTML});
+      return el.outerHTML;
     }
 
   </script>
