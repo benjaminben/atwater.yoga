@@ -369,6 +369,7 @@
       switch( type ){
         case 'img':
           el.src = src.string;
+          el.style.maxHeight = '50%';
           break;
         case 'p':
           el.textContent = src.string;
@@ -393,8 +394,9 @@
 
       el.className = 'item';
       el.style.maxWidth = '50%';
-      el.style.maxHeight = '50%';
-      el.style.top = Math.random() * 50 + '%';
+      var widthVar = Math.random() * 50;
+      el.style.width = widthVar + '%';
+      el.style.top = Math.random() * (100 - widthVar) + '%';
       el.style.left = Math.random() * 50 + '%';
 
       console.log({html: el.outerHTML});
