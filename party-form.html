@@ -55,21 +55,45 @@
     svg#RAD.loaded {
       animation: glow-up 0.5s ease forwards;
     }
-    .option {
+
+    .cta {
+      overflow: hidden;
+    }
+
+    #img_ops {
       display: none;
+      opacity: 0;
+    }
+    #img_ops.open {
+      display: block;
+      animation: imgOpsIn 0.5s ease forwards;
     }
 
     #img_ops .option {
       width: 50%;
+      height: 100%;
       border: 1px solid black;
+      box-sizing: border-box;
       background: white;
       text-align: center;
+      display: inline-block;
     }
     #img_ops .option:nth-of-type(1) {
       border-radius: 3px 0px 0px 3px;
     }
     #img_ops .option:nth-of-type(2) {
       border-radius: 0px 3px 3px 0px;
+    }
+
+
+    #text_ops {
+      display: none;
+      position: absolute;
+      transform: translate(0, -100%);
+    }
+    #text_ops.open {
+      display: block;
+      animation: textOpsIn 0.5s ease forwards;
     }
 
     @keyframes glow-up {
@@ -83,6 +107,24 @@
       }
     }
 
+    @keyframes textOpsIn {
+      0% {
+        transform: translate(0%, -100%);
+      }
+      100% {
+        transform: translate(0%, 0%);
+      }
+    }
+
+    @keyframes imgOpsIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -91,23 +133,29 @@
     <div id="cont">
       <div class="section">
         <input id="img_imp" type="img"/>
-        <span id="img_cta" class="" data-id="img">submit image (url)</span>
+        <span id="img_cta" class="cta" data-id="img">submit image (url)</span>
         <span id="img_ops" class="options" type="img">
-          <span id="img_op_filter" class="submit option">filter</span>
+          <span id="img_op_filter" class="submit option" filter="true">filter</span>
           <span id="img_op_nofilter" class="submit option">#nofilter</span>
         </span>
       </div>
       <div class="section">
         <input id="text_imp" type="text"/>
-        <span id="text_cta" class="submit" data-id="text">submit text (lol)</span>
-        <span id="text_ops" class="options" type="text">
-          <span id="text_pre"></span>
-          <span id="text_font_param"></span>
-          <span id="text_rgb_param">
-            color:
-            r: <input id="text_rgb_r" class="text-rgb" />
-            g: <input id="text_rgb_g" class="text-rgb" />
-            b: <input id="text_rgb_b" class="text-rgb" />
+        <span id="text_cta" class="cta submit" data-id="text">
+          submit text (lol)
+          <span id="text_ops" class="options" type="text">
+            <span id="text_pre"></span>
+            <span id="text_font_param" class="text-param">
+              <span id="font_up" class="font-btn" up="true">+</span>
+              <span id="font_down" class="font-btn" down="true">-</span>
+              <span class="label">size</span>
+            </span>
+            <span id="text_rgb_param" class="text-param">
+              color:
+              r: <input id="text_rgb_r" class="text-rgb" />
+              g: <input id="text_rgb_g" class="text-rgb" />
+              b: <input id="text_rgb_b" class="text-rgb" />
+            </span>
           </span>
         </span>
       </div>
@@ -156,13 +204,13 @@
 
       for( var i = 0; i < rgbs.length; i++ ){
         rgbs[i].defaultValue = 0;
-        rgbs[i].addEventListener('change', function(){
+        rgbs[i].addEventListener('change', function(e){
 
-          if( parseInt(rgbs[i].value) > 255 ){
-            rgbs[i].value = 255;
+          if( parseInt(e.target.value) > 255 ){
+            e.target.value = 255;
           }
-          else if( parseInt(rgbs[i].value) < 0 ){
-            rgbs[i].value = 0;
+          else if( parseInt(e.target.value) < 0 ){
+            e.target.value = 0;
           }
 
           text_rgb = 'rgb('+
@@ -172,14 +220,33 @@
                       ')';
 
           text_node.setAttribute('color', text_rgb);
+          text_node.style.color = text_rgb;
         });
       }
     }
 
     function initFont(){
-      var text_node = document.getElementById('text_cta');
+      var text_node = document.getElementById('text_cta'),
+          font_btns = document.getElementsByClassName('font-btn');
 
       text_node.setAttribute('font', '1em');
+
+      for( var i = 0; i < font_btns.length; i++ ){
+        font_btns[i].addEventListener('click', function(e){
+          var current_size = parseFloat(
+            text_node.style.fontSize.substr(
+              0, (text_node.style.fontSize.length - 2)
+            )
+          );
+          if( e.target.getAttribute('up') ){
+            current_size += (current_size <= 2 ? 0.1 : 0);
+          }
+          else {
+            current_size -= (current_size >= 1 ? 0.1 : 0);
+          }
+          text_node.style.fontSize = current_size;
+        });
+      }
     }
 
     function handleOptions(e){
