@@ -46,12 +46,8 @@ var current_log = fs.readFileSync(__dirname + '/els_log.txt', 'utf8');
 fs.writeFileSync(__dirname + '/els_log.txt', (current_log ? current_log : ''));
 
 setInterval(function(){
-  console.log(prevEls, els)
-  console.log(prevEls == els, prevEls != els);
-
   for( var i = 0; i < els.length; i++ ){
     if( prevEls[i] !== els[i] ){
-      console.log('flub');
       var currentTime = new Date();
       fs.appendFile(__dirname + '/els_log.txt', '\n\n' + currentTime + '\n' + els, function(err){
         if ( err ) throw err;
@@ -60,4 +56,4 @@ setInterval(function(){
       break;
     }
   }
-}, 5000);
+}, 1800000);
