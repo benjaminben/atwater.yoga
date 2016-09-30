@@ -4,43 +4,49 @@
   <meta charset="UTF-8">
   <title>party form!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
   <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 
   <style>
     html, body {
       margin: 0;
       height: 100%;
+      font-family: 'Josefin Sans', sans-serif;
     }
     main {
       display: flex;
       flex-flow: column;
       height: 100%;
     }
+    #title {
+      text-align: center;
+      margin: auto;
+    }
     #cont {
-      margin: auto auto 0;
-      width: 90%;
+      margin: 0 auto;
+      width: 100%;
       max-width: 600px;
     }
     #cont .section {
-      margin-bottom: 1em;
+      margin: 0 2em 1em;
     }
     #cont .section input {
       display: block;
-      width: 100%;
-
+      width: 99%;
+      font-size: 1em;
     }
     #cont .section .submit {
       display: block;
       text-align: center;
-      padding: 20px 10px;
-      max-width: 200px;
+      padding: 20px 0;
+      max-width: 180px;
       margin: 1em auto 0;
       border-radius: 3px;
       border: 1px solid black;
       cursor: pointer;
     }
     svg#RAD {
-      max-width: 75%;
+      max-width: 99%;
       max-height: 50%;
       margin: auto;
       opacity: 0;
@@ -67,26 +73,31 @@
 </head>
 <body>
   <main id="main">
+    <h1 id="title">PARTY!</h1>
     <div id="cont">
       <div class="section">
         <input id="img_imp"/>
         <span class="submit" data-id="img">submit image (url)</span>
-        <span id="img_opt" class="option"></span>
+        <span id="img_ops">
+          <span id="img_op_filter" class="option">filter</span>
+          <span id="img_op_filter" class="option">#nofilter</span>
+        </span>
       </div>
       <div class="section">
         <input id="text_imp"/>
         <span class="submit" data-id="text">submit text (lol)</span>
-        <span id="text_opt" class="option"></span>
+        <span id="text_ops" class="option">
+          <span></span>
+          <span></span>
+        </span>
       </div>
     </div>
     <script>
       var RAD = document.createElement('svg');
       document.getElementById('main').appendChild(RAD);
 
-
       RAD.id = ('RAD');
       function glowUp(el){
-        bloobs = el; console.log(el)
         el.setAttribute('class', 'loaded');
       }
       RAD.outerHTML = '' +
@@ -115,13 +126,14 @@
         var id = e.target.getAttribute('data-id'),
             src = {
               string: document.getElementById(id + '_imp').value,
-
+              option: 'bloob',
             };
+        src.string = src.string.replace(/^\s+/, '').replace(/\s+$/, '');
+        if( src.string === '' ){
+          return;
+        }
 
-
-        socket.emit('el', {html : conjureEl(id, src)})
-
-        // socket.emit(id, {src : document.getElementById(id + '_imp').value});
+        socket.emit('el', {html : conjureEl(id, src)});
       })
     }
 
@@ -140,16 +152,15 @@
     }
 
     function alchemy(type, src){
-      var el = document.createElement(type);
+      console.log(src.string);
       switch( type ){
         case 'img':
-          el.src = src;
+          el.src = src.string;
           break;
         case 'p':
-          el.textContent = src;
+          el.textContent = src.string;
       }
       el.className = 'item';
-      el.src = src;
       el.style.maxWidth = '50%';
       el.style.maxHeight = '50%';
       el.style.top = Math.random() * 50 + '%';
