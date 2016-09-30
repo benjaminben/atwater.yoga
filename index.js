@@ -1,5 +1,6 @@
 var express = require('express'),
     path    = require('path'),
+    fs      = require('fs'),
     app     = express();
 
 app.set('port', process.env.PORT || 8080);
@@ -16,8 +17,9 @@ app.get('/party', function(req, res){
 });
 
 var io = require('socket.io')(server),
-    io_party = io.of('/');
-    io_party_form = io.of('/party');
+    io_party = io.of('/'),
+    io_party_form = io.of('/party'),
+    prevEls = [],
     els = [];
 
 app.get('/els', function(req, res){
@@ -39,3 +41,23 @@ io_party.on('connection', function(socket) {
     els.shift()
   });
 });
+
+var current_log = fs.readFileSync(__dirname + '/els_log.txt', 'utf8');
+fs.writeFileSync(__dirname + '/els_log.txt', (current_log ? current_log : ''));
+
+setInterval(function(){
+  console.log(prevEls, els)
+  console.log(prevEls == els, prevEls != els);
+
+  for( var i = 0; i < els.length; i++ ){
+    if( prevEls[i] !== els[i] ){
+      console.log('flub');
+      var currentTime = new Date();
+      fs.appendFile(__dirname + '/els_log.txt', '\n\n' + currentTime + '\n' + els, function(err){
+        if ( err ) throw err;
+        prevEls = els.slice(0);
+      });
+      break;
+    }
+  }
+}, 5000);
