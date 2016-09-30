@@ -1,6 +1,6 @@
 var express = require('express'),
+    path    = require('path'),
     app     = express();
-
 
 app.set('port', process.env.PORT || 8080);
 var server = app.listen(app.get('port'), function(){
@@ -27,17 +27,6 @@ app.get('/els', function(req, res){
 io_party_form.on('connection', function(socket) {
   console.log('hello girl');
 
-  // socket.on('img', function(data){
-  //   console.log(data);
-  //   var el = { type: 'img', src: data.src };
-  //   io_party.emit('push', el)
-  // });
-  // socket.on('text', function(data){
-  //   console.log(data);
-  //   var el = { type: 'text', src: data.src };
-  //   io_party.emit('push', el)
-  // });
-
   socket.on('el', function(data){
     els.push(data.html);
     io_party.emit('push', data);
@@ -46,16 +35,7 @@ io_party_form.on('connection', function(socket) {
 
 io_party.on('connection', function(socket) {
   console.log('party!');
-
-  // socket.on('open', function(id, data){
-  //   console.log('id party',id);
-  //   socket.broadcast.to(id).emit('els', els);
-  // });
-
-  // socket.broadcast.to(id).emit('els', els);
-
-  // socket.on('el', function(data) {
-  //   els.push(data.html);
-  //   console.log('els', els);
-  // });
+  socket.on('pop', function(data){
+    els.shift()
+  });
 });
