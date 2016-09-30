@@ -228,7 +228,18 @@
       }
 
       if( src.options.filter ){
-        el.style.filter =
+        var sepia = Math.round(Math.random() * 50),
+            saturate = Math.round(Math.random() * 500),
+            contrast = Math.round(Math.random() * 50 + 100),
+        el.style.filter = 'sepia('+sepia+'%) saturate('+saturate+'%) contrast('+contrast+'%)';
+      }
+
+      if( src.options.font ){
+        el.style.fontSize = src.options.font;
+      }
+
+      if( src.options.color ){
+        el.style.color = src.options.color;
       }
 
       el.className = 'item';
