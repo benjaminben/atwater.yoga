@@ -430,10 +430,10 @@
 
       el.className = 'item';
       el.style.maxWidth = '50%';
-      var widthVar = Math.random() * 50;
+      var widthVar = Math.random() * 33;
       el.style.width = widthVar + '%';
-      el.style.top = Math.random() * (100 - widthVar) + '%';
-      el.style.left = Math.random() * 50 + '%';
+      el.style.top = Math.random() * 80 + '%';
+      el.style.left = Math.random() * (100 - widthVar) + '%';
 
       console.log({html: el.outerHTML});
       return el.outerHTML;
