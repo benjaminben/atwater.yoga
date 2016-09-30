@@ -103,7 +103,12 @@
         <span id="text_ops" class="options" type="text">
           <span id="text_pre"></span>
           <span id="text_font_param"></span>
-          <span id="text_rgb_param"></span>
+          <span id="text_rgb_param">
+            color:
+            r: <input id="text_rgb_r" class="text-rgb" />
+            g: <input id="text_rgb_g" class="text-rgb" />
+            b: <input id="text_rgb_b" class="text-rgb" />
+          </span>
         </span>
       </div>
     </div>
@@ -137,6 +142,45 @@
 
     img_imp.options = document.getElementById('img_ops');
     text_imp.options = document.getElementById('text_ops');
+
+    (function initFields(){
+      initRBGs();
+    }());
+
+    function initRBGs(){
+      var rgbs = document.getElementsByClassName('text-rgb'),
+          text_node = document.getElementById('text_cta'),
+          text_rgb = '';
+
+      text_node.setAttribute('color', text_rgb);
+
+      for( var i = 0; i < rgbs.length; i++ ){
+        rgbs[i].defaultValue = 0;
+        rgbs[i].addEventListener('change', function(){
+
+          if( parseInt(rgbs[i].value) > 255 ){
+            rgbs[i].value = 255;
+          }
+          else if( parseInt(rgbs[i].value) < 0 ){
+            rgbs[i].value = 0;
+          }
+
+          text_rgb = 'rgb('+
+                          rgbs[0].value+
+                      ','+rgbs[1].value+
+                      ','+rgbs[1].value+
+                      ')';
+
+          text_node.setAttribute('color', text_rgb);
+        });
+      }
+    }
+
+    function initFont(){
+      var text_node = document.getElementById('text_cta');
+
+      text_node.setAttribute('font', '1em');
+    }
 
     function handleOptions(e){
       var type = e.target.getAttribute('type'),
@@ -181,20 +225,6 @@
               font : e.target.getAttribute('font'),
               color : e.target.getAttribute('color'),
             },
-            // options: function(){
-            //   var ops = [
-            //         {type : 'filter', attr : e.target.getAttribute('filter')},
-            //         {type : 'font-size', attr : e.target.getAttribute('font-size')},
-            //         {type : 'color', attr : e.target.getAttribute('color')},
-            //       ],
-            //       arr = ops.map(function(op, i){
-            //         if( op.attr ){
-            //           return op;
-            //         }
-            //       });
-
-            //   return arr;
-            // },
           };
       src.string = src.string.replace(/^\s+/, '').replace(/\s+$/, '');
       if( src.string === '' ){
