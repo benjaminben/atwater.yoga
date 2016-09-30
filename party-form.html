@@ -20,7 +20,7 @@
     }
     #title {
       text-align: center;
-      margin: auto;
+      margin: 1em auto;
     }
     #cont {
       margin: 0 auto;
@@ -31,6 +31,7 @@
     }
     #cont .section {
       margin: 0 2em 1em;
+      position: relative;
     }
     #cont .section > input {
       display: block;
@@ -97,31 +98,53 @@
     #text_ops {
       display: none;
       position: absolute;
-      width: 100%;
-      transform: translate(0, -100%);
+      text-align: center;
       left: 0;
-      bottom: 0;
-      background: white;
+      top: 40px;
+      /*white-space: nowrap;*/
     }
-    #text_ops .option {
-      display: block;
-      padding: 20px 0;
+    #text_ops .text-param {
+      display: flex;
+      flex-flow: column;
+      position: relative;
+    }
+    #text_ops .font-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
       border: 1px solid black;
     }
-    #text_ops .option:nth-of-type(2) {
-      border-radius: 0px 0px 3px 3px;
+    #text_ops .font-btn svg {
+      /*width: 100%;
+      height: 100%;*/
+    }
+    #font_up {
+      margin-bottom: 2em;
+    }
+    #text_demo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     #text_rgb_param input {
       display: inline-block;
-      width: 5%;
+      width: 30px;
+      border: 2px solid #dadada;
+      border-radius: 7px;
+    }
+    #text_rgb_param .text-rgb_cont {
+      text-align: right;
     }
     #text_section.ops-open .cta {
       overflow: visible;
       z-index: 1;
-      border-radius: 3px 3px 0px 0px;
     }
     #text_section.ops-open #text_ops {
-      display: block;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
       z-index: 0;
       animation: textOpsIn 0.5s ease forwards;
     }
@@ -139,10 +162,12 @@
 
     @keyframes textOpsIn {
       0% {
-        transform: translate(0%, 0%);
+        opacity: 0;
+        transform: translate(0%, -10%);
       }
       100% {
-        transform: translate(0%, 100%);
+        opacity: 1;
+        transform: translate(0%, 0%);
       }
     }
 
@@ -175,19 +200,23 @@
         <input id="text_imp" type="text"/>
         <span id="text_cta" class="cta">
           <span id="text_cta_text_ugh" data-id="text" class="submit">submit text (lol)</span>
-          <span id="text_ops" class="options" type="text">
-            <span id="text_pre"></span>
-            <span id="text_font_param" class="text-param option">
-              <span id="font_down" class="font-btn" down="true">-</span>
-              <span class="label" id="text_demo">size</span>
-              <span id="font_up" class="font-btn" up="true">+</span>
-            </span>
-            <span id="text_rgb_param" class="text-param option">
-              color:
-              r: <input type="number" id="text_rgb_r" class="text-rgb" />
-              g: <input type="number" id="text_rgb_g" class="text-rgb" />
-              b: <input type="number" id="text_rgb_b" class="text-rgb" />
-            </span>
+        </span>
+        <span id="text_ops" class="options" type="text">
+          <span id="text_font_param" class="text-param option">
+            <svg id="font_up" class="font-btn" up="true" width="100" height="100" viewBox="0 0 100 100">
+              <path d="M10 50 L90 50" stroke="rgba(0,0,0,1)" strokewidth="5"></path>
+              <path d="M50 10 L50 90" stroke="rgba(0,0,0,1)" strokewidth="5"></path>
+            </svg>
+            <span class="label" id="text_demo">size</span>
+            <svg id="font_down" class="font-btn" width="100" height="100" viewBox="0 0 100 100">
+              <path d="M10 50 L90 50" stroke="rgba(0,0,0,1)" strokewidth="5"></path>
+            </svg>
+          </span>
+          <span id="text_rgb_param" class="text-param option">
+            <span>color:</span>
+            <span class="text-rgb-cont">r: <input type="number" id="text_rgb_r" class="text-rgb" /></span>
+            <span class="text-rgb-cont">g: <input type="number" id="text_rgb_g" class="text-rgb" /></span>
+            <span class="text-rgb-cont">b: <input type="number" id="text_rgb_b" class="text-rgb" /></span>
           </span>
         </span>
       </div>
@@ -242,10 +271,21 @@
       text_node.setAttribute('color', text_rgb);
       text_node.style.color = text_rgb;
 
+      var onInput = function(e){
+        text_rgb = 'rgb('+
+                        rgbs[0].value+
+                    ','+rgbs[1].value+
+                    ','+rgbs[2].value+
+                    ')';
+
+        text_node.setAttribute('color', text_rgb);
+        text_node.style.color = text_rgb;
+      }
+
       for( var i = 0; i < rgbs.length; i++ ){
         rgbs[i].defaultValue = 0;
-        rgbs[i].addEventListener('input', function(e){
-
+        rgbs[i].addEventListener('input', onInput);
+        rgbs[i].addEventListener('blur', function(e){
           if( parseInt(e.target.value) > 255 ){
             e.target.value = 255;
           }
@@ -253,15 +293,7 @@
                   !parseInt(e.target.value) ){
             e.target.value = 0;
           }
-
-          text_rgb = 'rgb('+
-                          rgbs[0].value+
-                      ','+rgbs[1].value+
-                      ','+rgbs[2].value+
-                      ')';
-
-          text_node.setAttribute('color', text_rgb);
-          text_node.style.color = text_rgb;
+          onInput();
         });
       }
     }
@@ -273,9 +305,10 @@
 
       text_node.setAttribute('font', '1em');
       demo.style.fontSize = '1em';
-
+      console.log(font_btns)
       for( var i = 0; i < font_btns.length; i++ ){
         font_btns[i].addEventListener('click', function(e){
+          console.log('clack')
           var current_size = parseFloat(demo.style.fontSize.substr(
                 0, (demo.style.fontSize.length - 2)
               )
@@ -302,6 +335,8 @@
 
       if( type == 'img' && val.length && !val.match(/(https?:\/\/.*\.(?:png|jpg|gif|jpeg|svg))/) ){
         document.getElementById('img_cta_text_ugh').innerHTML = "invalid url<br/>[try .jpg / .png / .etc ]";
+        open = e.target.open = false;
+        parent.className = parent.className.replace(clss, '');
         return false;
       }
       else if( type == 'img' ){
