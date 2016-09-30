@@ -36,6 +36,8 @@
       display: block;
       width: 99%;
       font-size: 1em;
+      border: 2px solid #dadada;
+      border-radius: 7px;
     }
     #cont .section .cta {
       display: block;
@@ -235,9 +237,10 @@
     function initRBGs(){
       var rgbs = document.getElementsByClassName('text-rgb'),
           text_node = document.getElementById('text_cta_text_ugh'),
-          text_rgb = '';
+          text_rgb = 'rgb(0,0,0)';
 
       text_node.setAttribute('color', text_rgb);
+      text_node.style.color = text_rgb;
 
       for( var i = 0; i < rgbs.length; i++ ){
         rgbs[i].defaultValue = 0;
@@ -303,6 +306,11 @@
       }
       else if( type == 'img' ){
         document.getElementById('img_cta_text_ugh').innerHTML = "submit image (url)";
+      }
+
+      if( type == 'text' && !val.length ){
+        document.getElementById('text_cta_text_ugh').setAttribute('color', 'rgb(0,0,0)');
+        document.getElementById('text_cta_text_ugh').style.color = 'rgb(0,0,0)';
       }
 
       if( !val && open ){

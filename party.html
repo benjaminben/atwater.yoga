@@ -8,6 +8,18 @@
   <style>
     .item {
       position: absolute;
+      opacity: 0;
+      animation: glow-up 0.5s ease forwards;
+    }
+    @keyframes glow-up {
+      0% {
+        opacity: 0;
+        transform: translate(0%, -10%);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(0%, 0%);
+      }
     }
   </style>
 
@@ -18,15 +30,6 @@
   <script>
   var socket = io('/');
 
-  // socket.emit('open', {});
-
-  // socket.on('els', function(els){
-  //   els.forEach(function(el, i){
-  //     console.log(i);
-  //     document.body.innerHTML += el;
-  //   });
-  // });
-
   function initEls(){
     var els = new XMLHttpRequest();
     els.onreadystatechange = function() {
@@ -34,7 +37,7 @@
         if( els.status == 200 ){
           var arr = JSON.parse(els.responseText);
           arr.forEach(function(el, i){
-            document.body.innerHTML += el;
+            pasteEl(el);
           });
         }
         else {
@@ -55,7 +58,9 @@
   });
 
   function pasteEl(html){
-    document.body.innerHTML += html;
+    var node = document.createElement('span');
+    document.body.appendChild(node);
+    node.outerHTML = html;
   }
 
   // function conjureEl(data){
