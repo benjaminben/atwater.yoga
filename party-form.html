@@ -63,28 +63,33 @@
     }
 
     #img_ops {
-      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       opacity: 0;
+      background: white;
     }
     #img_section.ops-open #img_ops {
-      display: block;
+      display: flex;
       animation: imgOpsIn 0.5s ease forwards;
     }
 
     #img_ops .option {
-      width: 50%;
-      height: 100%;
-      border: 1px solid black;
-      box-sizing: border-box;
+      flex: 1;
+      padding: 20px 0;
       background: white;
       text-align: center;
       display: inline-block;
     }
     #img_ops .option:nth-of-type(1) {
       border-radius: 3px 0px 0px 3px;
+      border-right: 1px solid black;
     }
     #img_ops .option:nth-of-type(2) {
       border-radius: 0px 3px 3px 0px;
+      border-left: 1px solid black;
     }
 
     #text_ops {
@@ -156,21 +161,23 @@
     <div id="cont">
       <div id="img_section" class="section">
         <input id="img_imp" type="img"/>
-        <span id="img_cta" class="cta" data-id="img">submit image (url)</span>
-        <span id="img_ops" class="options" type="img">
-          <span id="img_op_filter" class="submit option" filter="true">filter</span>
-          <span id="img_op_nofilter" class="submit option">#nofilter</span>
+        <span id="img_cta" class="cta">
+          <span id="img_cta_text_ugh">submit image (url)</span>
+          <span id="img_ops" class="options" type="img">
+            <span id="img_op_filter" data-id="img" class="submit option" filter="true">filter</span>
+            <span id="img_op_nofilter" data-id="img" class="submit option">#nofilter</span>
+          </span>
         </span>
       </div>
       <div id="text_section" class="section">
         <input id="text_imp" type="text"/>
-        <span id="text_cta" class="cta submit" data-id="text">
-          <span>submit text (lol)</span>
+        <span id="text_cta" class="cta">
+          <span id="text_cta_text_ugh" data-id="text" class="submit">submit text (lol)</span>
           <span id="text_ops" class="options" type="text">
             <span id="text_pre"></span>
             <span id="text_font_param" class="text-param option">
               <span id="font_down" class="font-btn" down="true">-</span>
-              <span class="label">size</span>
+              <span class="label" id="text_demo">size</span>
               <span id="font_up" class="font-btn" up="true">+</span>
             </span>
             <span id="text_rgb_param" class="text-param option">
@@ -227,7 +234,7 @@
 
     function initRBGs(){
       var rgbs = document.getElementsByClassName('text-rgb'),
-          text_node = document.getElementById('text_cta'),
+          text_node = document.getElementById('text_cta_text_ugh'),
           text_rgb = '';
 
       text_node.setAttribute('color', text_rgb);
@@ -257,31 +264,32 @@
     }
 
     function initFont(){
-      var text_node = document.getElementById('text_cta'),
+      var text_node = document.getElementById('text_cta_text_ugh'),
+          demo      = document.getElementById('text_demo'),
           font_btns = document.getElementsByClassName('font-btn');
 
       text_node.setAttribute('font', '1em');
+      demo.style.fontSize = '1em';
 
       for( var i = 0; i < font_btns.length; i++ ){
         font_btns[i].addEventListener('click', function(e){
-          var current_size = parseFloat(
-            text_node.style.fontSize.substr(
-              0, (text_node.style.fontSize.length - 2)
-            )
+          var current_size = parseFloat(demo.style.fontSize.substr(
+                0, (demo.style.fontSize.length - 2)
+              )
           );
           if( e.target.getAttribute('up') ){
-            current_size += (current_size <= 2 ? 0.1 : 0);
+            current_size += (current_size < 2 ? 0.1 : 0);
           }
           else {
-            current_size -= (current_size >= 1 ? 0.1 : 0);
+            current_size -= (current_size > 1 ? 0.1 : 0);
           }
-          text_node.style.fontSize = current_size;
+          demo.style.fontSize = current_size + 'em';
+          text_node.setAttribute('font', demo.style.fontSize);
         });
       }
     }
 
     function handleOptions(e){
-      console.log('blub')
       var type = e.target.getAttribute('type'),
           val  = e.target.value,
           parent = e.target.parent_section,
@@ -289,32 +297,22 @@
           ops  = e.target.options,
           clss = ' ops-open'
 
-      if( type == 'img' && val.match(/(https?:\/\/.*\.(?:png|jpg|gif|jpeg|svg))/) ){
-        document.getElementById('img_cta').innerHTML = "invalid url<br/>[try .jpg / .png / .etc ]";
+      if( type == 'img' && val.length && !val.match(/(https?:\/\/.*\.(?:png|jpg|gif|jpeg|svg))/) ){
+        document.getElementById('img_cta_text_ugh').innerHTML = "invalid url<br/>[try .jpg / .png / .etc ]";
         return false;
       }
-      console.log(parent)
-      console.log(!val, open)
+      else if( type == 'img' ){
+        document.getElementById('img_cta_text_ugh').innerHTML = "submit image (url)";
+      }
 
       if( !val && open ){
         open = e.target.open = false;
         parent.className = parent.className.replace(clss, '');
-        // console.log(parent.className.indexOf(clss), parent.className.indexOf(clss) + clss.length)
-        // parent.className = parent.className.slice(parent.className.indexOf(clss, parent.className.indexOf(clss) + clss.length))
       }
       else if( !open ){
-        console.log('picca')
         open = e.target.open = true;
-        console.log(open, e.target.open)
         parent.className += clss;
       }
-
-      // switch {
-      //   case open :
-      //       break;
-      //   default :
-      //       ops.className += ' open';
-      // }
     }
 
 
@@ -358,7 +356,8 @@
     }
 
     function alchemy(type, src){
-      console.log(src.string);
+      var el = document.createElement(type);
+
       switch( type ){
         case 'img':
           el.src = src.string;
@@ -375,10 +374,12 @@
       }
 
       if( src.options.font ){
+        console.log('font', src.options.font)
         el.style.fontSize = src.options.font;
       }
 
       if( src.options.color ){
+        console.log('color', src.options.color)
         el.style.color = src.options.color;
       }
 
