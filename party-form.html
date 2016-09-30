@@ -26,16 +26,18 @@
       margin: 0 auto;
       width: 100%;
       max-width: 600px;
+      position: relative;
+      z-index: 1;
     }
     #cont .section {
       margin: 0 2em 1em;
     }
-    #cont .section input {
+    #cont .section > input {
       display: block;
       width: 99%;
       font-size: 1em;
     }
-    #cont .section .submit {
+    #cont .section .cta {
       display: block;
       text-align: center;
       padding: 20px 0;
@@ -45,26 +47,26 @@
       border: 1px solid black;
       cursor: pointer;
       background: white;
+      overflow: hidden;
+      position: relative;
     }
     svg#RAD {
       max-width: 99%;
       max-height: 50%;
       margin: auto;
       opacity: 0;
+      position: relative;
+      z-index: 0;
     }
     svg#RAD.loaded {
       animation: glow-up 0.5s ease forwards;
-    }
-
-    .cta {
-      overflow: hidden;
     }
 
     #img_ops {
       display: none;
       opacity: 0;
     }
-    #img_ops.open {
+    #img_section.ops-open #img_ops {
       display: block;
       animation: imgOpsIn 0.5s ease forwards;
     }
@@ -85,14 +87,35 @@
       border-radius: 0px 3px 3px 0px;
     }
 
-
     #text_ops {
       display: none;
       position: absolute;
+      width: 100%;
       transform: translate(0, -100%);
+      left: 0;
+      bottom: 0;
+      background: white;
     }
-    #text_ops.open {
+    #text_ops .option {
       display: block;
+      padding: 20px 0;
+      border: 1px solid black;
+    }
+    #text_ops .option:nth-of-type(2) {
+      border-radius: 0px 0px 3px 3px;
+    }
+    #text_rgb_param input {
+      display: inline-block;
+      width: 5%;
+    }
+    #text_section.ops-open .cta {
+      overflow: visible;
+      z-index: 1;
+      border-radius: 3px 3px 0px 0px;
+    }
+    #text_section.ops-open #text_ops {
+      display: block;
+      z-index: 0;
       animation: textOpsIn 0.5s ease forwards;
     }
 
@@ -109,10 +132,10 @@
 
     @keyframes textOpsIn {
       0% {
-        transform: translate(0%, -100%);
+        transform: translate(0%, 0%);
       }
       100% {
-        transform: translate(0%, 0%);
+        transform: translate(0%, 100%);
       }
     }
 
@@ -131,7 +154,7 @@
   <main id="main">
     <h1 id="title">PARTY!</h1>
     <div id="cont">
-      <div class="section">
+      <div id="img_section" class="section">
         <input id="img_imp" type="img"/>
         <span id="img_cta" class="cta" data-id="img">submit image (url)</span>
         <span id="img_ops" class="options" type="img">
@@ -139,22 +162,22 @@
           <span id="img_op_nofilter" class="submit option">#nofilter</span>
         </span>
       </div>
-      <div class="section">
+      <div id="text_section" class="section">
         <input id="text_imp" type="text"/>
         <span id="text_cta" class="cta submit" data-id="text">
-          submit text (lol)
+          <span>submit text (lol)</span>
           <span id="text_ops" class="options" type="text">
             <span id="text_pre"></span>
-            <span id="text_font_param" class="text-param">
-              <span id="font_up" class="font-btn" up="true">+</span>
+            <span id="text_font_param" class="text-param option">
               <span id="font_down" class="font-btn" down="true">-</span>
               <span class="label">size</span>
+              <span id="font_up" class="font-btn" up="true">+</span>
             </span>
-            <span id="text_rgb_param" class="text-param">
+            <span id="text_rgb_param" class="text-param option">
               color:
-              r: <input id="text_rgb_r" class="text-rgb" />
-              g: <input id="text_rgb_g" class="text-rgb" />
-              b: <input id="text_rgb_b" class="text-rgb" />
+              r: <input type="number" id="text_rgb_r" class="text-rgb" />
+              g: <input type="number" id="text_rgb_g" class="text-rgb" />
+              b: <input type="number" id="text_rgb_b" class="text-rgb" />
             </span>
           </span>
         </span>
@@ -185,14 +208,21 @@
         submits = document.getElementsByClassName('submit'),
         socket = io('/party');
 
-    img_imp.open = false;
-    text_imp.open = false;
-
-    img_imp.options = document.getElementById('img_ops');
-    text_imp.options = document.getElementById('text_ops');
-
     (function initFields(){
+      img_imp.open = false;
+      text_imp.open = false;
+
+      img_imp.options = document.getElementById('img_ops');
+      text_imp.options = document.getElementById('text_ops');
+
+      img_imp.parent_section = document.getElementById('img_section');
+      text_imp.parent_section = document.getElementById('text_section');
+
       initRBGs();
+      initFont();
+
+      img_imp.addEventListener('input', handleOptions);
+      text_imp.addEventListener('input', handleOptions);
     }());
 
     function initRBGs(){
@@ -204,19 +234,20 @@
 
       for( var i = 0; i < rgbs.length; i++ ){
         rgbs[i].defaultValue = 0;
-        rgbs[i].addEventListener('change', function(e){
+        rgbs[i].addEventListener('input', function(e){
 
           if( parseInt(e.target.value) > 255 ){
             e.target.value = 255;
           }
-          else if( parseInt(e.target.value) < 0 ){
+          else if( parseInt(e.target.value) < 0 ||
+                  !parseInt(e.target.value) ){
             e.target.value = 0;
           }
 
           text_rgb = 'rgb('+
                           rgbs[0].value+
                       ','+rgbs[1].value+
-                      ','+rgbs[1].value+
+                      ','+rgbs[2].value+
                       ')';
 
           text_node.setAttribute('color', text_rgb);
@@ -250,28 +281,40 @@
     }
 
     function handleOptions(e){
+      console.log('blub')
       var type = e.target.getAttribute('type'),
           val  = e.target.value,
+          parent = e.target.parent_section,
           open = e.target.open,
-          ops  = e.target.options;
+          ops  = e.target.options,
+          clss = ' ops-open'
 
       if( type == 'img' && val.match(/(https?:\/\/.*\.(?:png|jpg|gif|jpeg|svg))/) ){
         document.getElementById('img_cta').innerHTML = "invalid url<br/>[try .jpg / .png / .etc ]";
         return false;
       }
+      console.log(parent)
+      console.log(!val, open)
 
       if( !val && open ){
-        open = false;
-        e.target.className = e.target.className.replace
-          ( /(?:^|\s)open(?!\S)/g , '' );
+        open = e.target.open = false;
+        parent.className = parent.className.replace(clss, '');
+        // console.log(parent.className.indexOf(clss), parent.className.indexOf(clss) + clss.length)
+        // parent.className = parent.className.slice(parent.className.indexOf(clss, parent.className.indexOf(clss) + clss.length))
+      }
+      else if( !open ){
+        console.log('picca')
+        open = e.target.open = true;
+        console.log(open, e.target.open)
+        parent.className += clss;
       }
 
-      switch {
-        case open :
-            break;
-        default :
-            ops.className += ' open';
-      }
+      // switch {
+      //   case open :
+      //       break;
+      //   default :
+      //       ops.className += ' open';
+      // }
     }
 
 
@@ -327,7 +370,7 @@
       if( src.options.filter ){
         var sepia = Math.round(Math.random() * 50),
             saturate = Math.round(Math.random() * 500),
-            contrast = Math.round(Math.random() * 50 + 100),
+            contrast = Math.round(Math.random() * 50 + 100);
         el.style.filter = 'sepia('+sepia+'%) saturate('+saturate+'%) contrast('+contrast+'%)';
       }
 
