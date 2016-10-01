@@ -89,7 +89,7 @@
     main.appendChild(node);
     node.outerHTML = html;
 
-    if( main.childNodes.length > 50 ){
+    if( main.childNodes.length > 75 ){
       main.childNodes[0].className += ' glow-out';
       setTimeout(function(){
         main.removeChild(main.childNodes[0]);
