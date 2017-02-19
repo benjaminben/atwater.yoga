@@ -496,9 +496,11 @@
     }
 
     var pcg = document.getElementById("particle_color_field")
-    pcg.box = pcg.getBoundingClientRect()
+    pcg.top = pcg.offsetTop
     pcg.addEventListener("mousedown", colorDown)
     pcg.addEventListener("touchstart", colorDown)
+
+    console.log(pcg.box)
 
     function colorDown(e) {
       var typeUp,
@@ -531,16 +533,14 @@
     function colorShift(e) {
       e.stopPropagation()
 
-      var newX = ((e.clientX || e.targetTouches["0"].pageX) - e.target.box.left) / e.target.box.width
-      var newY = ((e.clientY || e.targetTouches["0"].pageY) - e.target.box.top) / e.target.box.height
+      var newX = ((e.pageX || e.targetTouches["0"].pageX) - e.target.offsetLeft) / e.target.width
+      var newY = ((e.pageY || e.targetTouches["0"].pageY) - e.target.offsetTop) / e.target.height
       if (newX > 1) {newX = 1}; if (newX < 0) {newX = 0};
       if (newY > 1) {newY = 1}; if (newY < 0) {newY = 0};
 
-      console.log(e.targetTouches["0"])
-
       var h = Math.round(newX * 295)
       var s = 45
-      var l = Math.round((newY + 0.25) * 75)
+      var l = Math.round(newY * 75)
       var hsl = "hsl("+h+","+s+"%,"+l+"%)"
 
       e.target.style.backgroundColor = hsl
