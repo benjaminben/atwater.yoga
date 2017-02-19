@@ -35,7 +35,6 @@ io_party_form.on('connection', function(socket) {
   });
 
   socket.on('func', function(data) {
-    console.log("we got tha func",data)
     io_party.emit('func', data)
   })
 });
