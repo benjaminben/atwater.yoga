@@ -124,7 +124,7 @@
   var canvas = document.getElementsByTagName("canvas")[0];
   var ctx = canvas.getContext("2d");
 
-  var w = window.innerWidth, h = window.outerHeight;
+  var w = window.innerWidth, h = window.innerHeight;
   canvas.width = w;
   canvas.height = h;
 
@@ -141,7 +141,7 @@
 
   function subtractParticle() {
     if (particles.length) {
-      particles.pop()
+      particles.splice(0,1)
     }
   }
 
@@ -183,7 +183,7 @@
 
 
     this.draw = function(){
-      ctx.fillStyle=fill || "rgb(255,0,0)";
+      ctx.fillStyle=fill || "rgb(255,255,255)";
       ctx.beginPath();
       ctx.arc(this.x,this.y,this.r, 0, Math.PI*2, false);
       ctx.fill();

@@ -13,11 +13,6 @@
       height: 100%;
       font-family: 'Josefin Sans', sans-serif;
     }
-    main {
-      display: flex;
-      flex-flow: column;
-      height: 100%;
-    }
     #title {
       text-align: center;
       margin: 1em auto;
@@ -55,9 +50,11 @@
       position: relative;
     }
     svg#RAD {
-      max-width: 99%;
-      max-height: 50%;
-      margin: auto;
+      width: 90%;
+      max-width: 600px;
+      height: auto;
+      display: block;
+      margin: 60px auto;
       opacity: 0;
       position: relative;
       z-index: 0;
@@ -152,6 +149,7 @@
 
     #particle_cont {
       text-align: center;
+      margin-top: 40px;
     }
 
     .particle-quant {
@@ -517,9 +515,12 @@
           break
       }
 
+      document.body.style.overflow = "hidden"
+
       e.target.removeEventListener(e.type, colorDown)
       e.target.addEventListener(typeShift, colorShift)
       var binding = function() {
+        document.body.style.overflow = "auto"
         e.target.removeEventListener(typeShift, colorShift)
         e.target.addEventListener(e.type, colorDown)
         window.removeEventListener(typeUp, binding)
@@ -528,10 +529,14 @@
     }
 
     function colorShift(e) {
-      var newX = ((e.clientX || e.targetTouches["0"].clientX) - e.target.box.left) / e.target.box.width
-      var newY = ((e.clientY || e.targetTouches["0"].clientY) - e.target.box.top) / e.target.box.height
+      e.stopPropagation()
+
+      var newX = ((e.clientX || e.targetTouches["0"].pageX) - e.target.box.left) / e.target.box.width
+      var newY = ((e.clientY || e.targetTouches["0"].pageY) - e.target.box.top) / e.target.box.height
       if (newX > 1) {newX = 1}; if (newX < 0) {newX = 0};
       if (newY > 1) {newY = 1}; if (newY < 0) {newY = 0};
+
+      console.log(e.targetTouches["0"])
 
       var h = Math.round(newX * 295)
       var s = 45
