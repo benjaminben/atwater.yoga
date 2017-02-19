@@ -169,6 +169,9 @@
       /*margin: 1em auto;*/
       border: 1px solid black;
     }
+    .submit-btn {
+      display: block;
+    }
 
     .floaty-black {
       animation: floatBlack 2.66s infinite alternate;
@@ -279,6 +282,9 @@
         <span id="subtractParticle" class="particle-quant">subtract particle</span>
         <h2 class="color-field-header">hold/drag for color!</h2>
         <canvas id="particle_color_field" class="color-field" style="background-color: hsl(295,0,1)"></canvas>
+        <h2 class="color-field-header">change background</h2>
+        <canvas id="canvas_color_field" class="color-field" style="background-color: hsl(295,0,1)"></canvas>
+        <button id="canvas_color_btn" class="submit-btn" value="submit">submit</button>
       </div>
     </div>
     <script>
@@ -496,11 +502,12 @@
     }
 
     var pcg = document.getElementById("particle_color_field")
-    pcg.top = pcg.offsetTop
     pcg.addEventListener("mousedown", colorDown)
     pcg.addEventListener("touchstart", colorDown)
 
-    console.log(pcg.box)
+    var ccg = document.getElementById("canvas_color_field")
+    ccg.addEventListener("mousedown", colorDown)
+    ccg.addEventListener("touchstart", colorDown)
 
     function colorDown(e) {
       var typeUp,
@@ -553,6 +560,7 @@
 
     var addP = document.getElementById("addParticle")
     var subP = document.getElementById("subtractParticle")
+    var ccb = document.getElementById("canvas_color_btn")
 
     addP.addEventListener("click", function() {
       emitFunc({
@@ -565,6 +573,14 @@
     subP.addEventListener("click", function() {
       emitFunc({
         name: "subtractParticle"
+      })
+    })
+    ccb.addEventListener("click", function() {
+      emitFunc({
+        name: "changeBg",
+        options: {
+          fill: ccg.style.backgroundColor
+        }
       })
     })
 

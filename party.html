@@ -123,6 +123,7 @@
 
   var canvas = document.getElementsByTagName("canvas")[0];
   var ctx = canvas.getContext("2d");
+  var ctx_bg = "rgba(255,255,255,1)"
 
   var w = window.innerWidth, h = window.innerHeight;
   canvas.width = w;
@@ -151,8 +152,15 @@
     particles.push(p);
   }
 
+  function changeBg(options) {
+    var fill = options ? options.fill : null
+    if (fill) {
+      ctx_bg = fill
+    }
+  }
+
   function reset_scene(){
-    ctx.fillStyle = "#03244B";
+    ctx.fillStyle = ctx_bg;
     ctx.fillRect(0,0,w,h);
   }
 
@@ -200,6 +208,7 @@
   window.funcLib = {
     addParticle: addParticle,
     subtractParticle: subtractParticle,
+    changeBg: changeBg
   }
 
   </script>
