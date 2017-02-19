@@ -150,6 +150,28 @@
       animation: textOpsIn 0.5s ease forwards;
     }
 
+    #particle_cont {
+      text-align: center;
+    }
+
+    .particle-quant {
+      display: inline-block;
+      width: 50px;
+      margin: 0 60px;
+    }
+
+    .color-field-header {
+      font-size: 1.33em;
+      margin: 1em auto;
+    }
+    .color-field {
+      width: 166px;
+      height: 100px;
+      display: inline-block;
+      /*margin: 1em auto;*/
+      border: 1px solid black;
+    }
+
     .floaty-black {
       animation: floatBlack 2.66s infinite alternate;
       transform: translate(0%, 20%);
@@ -253,8 +275,13 @@
           </span>
         </span>
       </div>
-      <span id="addParticle">add particle</span>
-      <span id="subtractParticle">subtract particle</span>
+      <div id="particle_cont">
+        <h1 class="section-header">PARTYCLES</h1>
+        <span id="addParticle" class="particle-quant">add particle</span>
+        <span id="subtractParticle" class="particle-quant">subtract particle</span>
+        <h2 class="color-field-header">hold/drag for color!</h2>
+        <canvas id="particle_color_field" class="color-field" style="background-color: hsl(295,0,1)"></canvas>
+      </div>
     </div>
     <script>
       var RAD = document.createElement('svg');
@@ -470,18 +497,70 @@
       return el.outerHTML;
     }
 
-    function emitFunc(funcName) {
-      socket.emit('func', {func: funcName})
+    var pcg = document.getElementById("particle_color_field")
+    pcg.box = pcg.getBoundingClientRect()
+    pcg.addEventListener("mousedown", colorDown)
+    pcg.addEventListener("touchstart", colorDown)
+
+    function colorDown(e) {
+      var typeUp,
+          typeShift;
+
+      switch (e.type) {
+        case "mousedown":
+          typeUp = "mouseup"
+          typeShift = "mousemove"
+          break
+        case "touchstart":
+          typeUp = "touchend"
+          typeShift = "touchmove"
+          break
+      }
+
+      e.target.removeEventListener(e.type, colorDown)
+      e.target.addEventListener(typeShift, colorShift)
+      var binding = function() {
+        e.target.removeEventListener(typeShift, colorShift)
+        e.target.addEventListener(e.type, colorDown)
+        window.removeEventListener(typeUp, binding)
+      }
+      window.addEventListener(typeUp, binding)
+    }
+
+    function colorShift(e) {
+      var newX = ((e.clientX || e.targetTouches["0"].clientX) - e.target.box.left) / e.target.box.width
+      var newY = ((e.clientY || e.targetTouches["0"].clientY) - e.target.box.top) / e.target.box.height
+      if (newX > 1) {newX = 1}; if (newX < 0) {newX = 0};
+      if (newY > 1) {newY = 1}; if (newY < 0) {newY = 0};
+
+      var h = Math.round(newX * 295)
+      var s = 45
+      var l = Math.round((newY + 0.25) * 75)
+      var hsl = "hsl("+h+","+s+"%,"+l+"%)"
+
+      e.target.style.backgroundColor = hsl
+    }
+
+
+    function emitFunc(data) {
+      socket.emit('func', data)
     }
 
     var addP = document.getElementById("addParticle")
     var subP = document.getElementById("subtractParticle")
 
     addP.addEventListener("click", function() {
-      emitFunc("addParticle")
+      emitFunc({
+        name: "addParticle",
+        options: {
+          fill: pcg.style.backgroundColor
+        }
+      })
     })
     subP.addEventListener("click", function() {
-      emitFunc("subtractParticle")
+      emitFunc({
+        name: "subtractParticle"
+      })
     })
 
   </script>

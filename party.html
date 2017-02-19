@@ -15,13 +15,15 @@
       height: 100%;
     }
     canvas {
-      background: pink;
+      background-color: blue;
       min-width: 100%;
       min-height: 100%;
-      /*-webkit-filter: blur(1px);*/
     }
     a {
-      color: black;
+      color: white;
+      -webkit-text-stroke: 1px black;
+      font-family: courier;
+      text-decoration: none;
     }
     .item {
       position: absolute;
@@ -91,7 +93,7 @@
   });
 
   socket.on('func', function(data){
-    window.funcLib[data.func]()
+    window.funcLib[data.name](data.options)
   })
 
   function pasteEl(html){
@@ -143,8 +145,9 @@
     }
   }
 
-  function addParticle() {
-    var p = new bg_particle();
+  function addParticle(options) {
+    var fill = options ? options.fill : null
+    var p = new bg_particle(fill);
     particles.push(p);
   }
 
@@ -169,7 +172,7 @@
     }
   }
 
-  function bg_particle(){
+  function bg_particle(fill){
     this.x = Math.random()*w;
     this.y = Math.random()*h;
     this.sx = Math.random()*2;
@@ -180,7 +183,7 @@
 
 
     this.draw = function(){
-      ctx.fillStyle="rgb(255,0,0)";
+      ctx.fillStyle=fill || "rgb(255,0,0)";
       ctx.beginPath();
       ctx.arc(this.x,this.y,this.r, 0, Math.PI*2, false);
       ctx.fill();
