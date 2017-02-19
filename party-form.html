@@ -95,7 +95,7 @@
 
     #text_ops {
       display: none;
-      position: absolute;
+      /*position: absolute;*/
       text-align: center;
       left: 0;
       top: 40px;
@@ -268,6 +268,14 @@
               <path d="M10 50 L90 50" stroke="rgba(0,0,0,1)" strokewidth="5"></path>
             </svg>
           </span>
+          <span id="text_font_fam_param" class="text-param option">
+            <span>font:</span>
+            <select>
+              <option selected value="courier" style="font-family: courier">courier</option>
+              <option value="helvetica" style="font-family: helvetica">arial</option>
+              <option value="serif" style="font-family: sans-serif;">timeless...</option>
+            </select>
+          </span>
           <span id="text_rgb_param" class="text-param option">
             <span>color:</span>
             <span class="text-rgb-cont">r: <input type="number" id="text_rgb_r" class="text-rgb" /></span>
@@ -301,8 +309,6 @@
   </main>
 
   <script>
-    console.log('hello form');
-
     var img_imp = document.getElementById('img_imp'),
         text_imp = document.getElementById('text_imp'),
         submits = document.getElementsByClassName('submit'),
@@ -367,10 +373,9 @@
 
       text_node.setAttribute('font', '1em');
       demo.style.fontSize = '1em';
-      console.log(font_btns)
+
       for( var i = 0; i < font_btns.length; i++ ){
         font_btns[i].addEventListener('click', function(e){
-          console.log('clack')
           var current_size = parseFloat(demo.style.fontSize.substr(
                 0, (demo.style.fontSize.length - 2)
               )
@@ -385,6 +390,12 @@
           text_node.setAttribute('font', demo.style.fontSize);
         });
       }
+
+      text_node.setAttribute("fontFam", "courier")
+
+      document.getElementById("text_font_fam_param").addEventListener("change", function(e) {
+        text_node.setAttribute('fontFam', e.target.value)
+      })
     }
 
     function handleOptions(e){
@@ -396,7 +407,7 @@
           clss = ' ops-open'
 
       if( type == 'img' && val.length && !val.match(/(https?:\/\/.*\.(?:png|jpg|gif|jpeg|svg))/) ){
-        document.getElementById('img_cta_text_ugh').innerHTML = "invalid url<br/>[try .jpg / .png / .etc ]";
+        document.getElementById('img_cta_text_ugh').innerHTML = "invalid url<br/>[ try .jpg / .png / .etc ]";
         open = e.target.open = false;
         parent.className = parent.className.replace(clss, '');
         return false;
@@ -407,7 +418,7 @@
 
       if( type == 'text' && !val.length ){
         document.getElementById('text_cta').setAttribute('color', 'rgb(0,0,0)');
-        document.getElementById('text_cta').style.color = 'rgb(0,0,0)';
+        document.getElementById('text_cta').setAttribute('font', 'courier');
       }
 
       if( !val && open ){
@@ -419,7 +430,6 @@
         parent.className += clss;
       }
     }
-
 
     socket.on('push', function(data){
       console.log('push', data)
@@ -437,6 +447,7 @@
               filter : e.target.getAttribute('filter'),
               font : e.target.getAttribute('font'),
               color : e.target.getAttribute('color'),
+              fontFam : e.target.getAttribute('fontFam'),
             },
           };
       src.string = src.string.replace(/^\s+/, '').replace(/\s+$/, '');
@@ -481,13 +492,15 @@
       }
 
       if( src.options.font ){
-        console.log('font', src.options.font)
         el.style.fontSize = src.options.font;
       }
 
       if( src.options.color ){
-        console.log('color', src.options.color)
         el.style.color = src.options.color;
+      }
+
+      if( src.options.fontFam ){
+        el.style.fontFamily = src.options.fontFam;
       }
 
       el.className = 'item';
@@ -497,7 +510,6 @@
       el.style.top = Math.random() * 80 + '%';
       el.style.left = Math.random() * (100 - widthVar) + '%';
 
-      console.log({html: el.outerHTML});
       return el.outerHTML;
     }
 
