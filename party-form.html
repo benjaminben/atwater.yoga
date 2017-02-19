@@ -253,6 +253,8 @@
           </span>
         </span>
       </div>
+      <span id="addParticle">add particle</span>
+      <span id="subtractParticle">subtract particle</span>
     </div>
     <script>
       var RAD = document.createElement('svg');
@@ -467,6 +469,20 @@
       console.log({html: el.outerHTML});
       return el.outerHTML;
     }
+
+    function emitFunc(funcName) {
+      socket.emit('func', {func: funcName})
+    }
+
+    var addP = document.getElementById("addParticle")
+    var subP = document.getElementById("subtractParticle")
+
+    addP.addEventListener("click", function() {
+      emitFunc("addParticle")
+    })
+    subP.addEventListener("click", function() {
+      emitFunc("subtractParticle")
+    })
 
   </script>
 </body>

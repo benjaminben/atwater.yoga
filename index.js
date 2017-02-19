@@ -33,6 +33,11 @@ io_party_form.on('connection', function(socket) {
     els.push(data.html);
     io_party.emit('push', data);
   });
+
+  socket.on('func', function(data) {
+    console.log("we got tha func",data)
+    io_party.emit('func', data)
+  })
 });
 
 io_party.on('connection', function(socket) {
