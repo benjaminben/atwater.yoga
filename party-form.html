@@ -93,6 +93,10 @@
       border-left: 1px solid black;
     }
 
+    #img_upload img {
+      max-width: 100%;
+    }
+
     #text_ops {
       display: none;
       /*position: absolute;*/
@@ -252,6 +256,11 @@
             <span id="img_op_nofilter" data-id="img" class="submit option">#nofilter</span>
           </span>
         </span>
+        <form id="img_upload">
+          <input type="file" accept="image/*" />
+          <img id="img_upload_preview" src="" />
+          <input type="submit" id="img_upload_submit" value="BOOM" />
+        </form>
       </div>
       <div id="text_section" class="section">
         <input id="text_imp" type="text"/>
@@ -315,7 +324,63 @@
         submits = document.getElementsByClassName('submit'),
         socket = io('/party');
 
-    (function initFields(){
+    var img_upload_input = document.querySelector("#img_upload input[type='file']")
+    var img_upload_preview = document.getElementById("img_upload_preview")
+    var img_upload_form = document.getElementById("img_upload")
+    var img_upload
+
+    img_upload_input.addEventListener("change", previewImgUpload)
+
+    function previewImgUpload() {
+      var file = img_upload_input.files[0]
+      var reader = new FileReader()
+
+      reader.addEventListener("load", function() {
+        img_upload_preview.src = img_upload = reader.result
+      })
+
+      if (file) {
+        reader.readAsDataURL(file)
+      }
+    }
+
+    function submitImgUpload(e) {
+      e.preventDefault()
+      if (!img_upload) {return}
+      var fd = new FormData()
+      var xhr = new XMLHttpRequest()
+      xhr.open("post", "https://api.imgur.com/3/image")
+      xhr.setRequestHeader("Authorization", "Client-ID 81c405c05cad551")
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var res = JSON.parse(xhr.responseText)
+            socket.emit(
+              'el',
+              {
+                html : conjureEl('img', {
+                  string: res.data.link,
+                  options: {}
+                })
+              }
+            )
+            img_upload_form.reset()
+            img_upload_preview.src = ""
+            img_upload = null
+          }
+          else {
+            console.log(xhr)
+          }
+        }
+      }
+
+      fd.append("image", img_upload.replace(/^data:image\/(png|jpe?g|gif|svg);base64,/, ""))
+      xhr.send(fd)
+    }
+
+    img_upload_form.addEventListener("submit", submitImgUpload)
+
+    function initFields(){
       img_imp.open = false;
       text_imp.open = false;
 
@@ -330,7 +395,9 @@
 
       img_imp.addEventListener('input', handleOptions);
       text_imp.addEventListener('input', handleOptions);
-    }());
+    }
+
+    initFields()
 
     function initRBGs(){
       var rgbs = document.getElementsByClassName('text-rgb'),
