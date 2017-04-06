@@ -1,7 +1,9 @@
-var express = require('express'),
-    path    = require('path'),
-    fs      = require('fs'),
-    app     = express();
+var express = require('express')
+var path    = require('path')
+var fs      = require('fs')
+var app     = express()
+var keys    = require(__dirname + '/keys')
+var db      = require(__dirname + '/db/MongoClient')(keys.mongo_user, keys.mongo_pw)
 
 app.set('port', process.env.PORT || 8080);
 var server = app.listen(app.get('port'), function(){
@@ -27,8 +29,6 @@ app.get('/els', function(req, res){
 });
 
 io_party_form.on('connection', function(socket) {
-  console.log('hello girl');
-
   socket.on('el', function(data){
     els.push(data.html);
     io_party.emit('push', data);
@@ -40,24 +40,7 @@ io_party_form.on('connection', function(socket) {
 });
 
 io_party.on('connection', function(socket) {
-  console.log('party!');
   socket.on('pop', function(data){
     els.shift()
   });
 });
-
-var current_log = fs.readFileSync(__dirname + '/els_log.txt', 'utf8');
-fs.writeFileSync(__dirname + '/els_log.txt', (current_log ? current_log : ''));
-
-setInterval(function(){
-  for( var i = 0; i < els.length; i++ ){
-    if( prevEls[i] !== els[i] ){
-      var currentTime = new Date();
-      fs.appendFile(__dirname + '/els_log.txt', '\n\n' + currentTime + '\n' + els, function(err){
-        if ( err ) throw err;
-        prevEls = els.slice(0);
-      });
-      break;
-    }
-  }
-}, 1800000);
