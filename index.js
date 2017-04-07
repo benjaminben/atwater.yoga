@@ -23,6 +23,20 @@ app.get('/', (req, res) => {
   res.render('create', {message: "hi pug"})
 })
 
+app.get('/board/:id', (req, res) => {
+  console.log("querying mdb for", req.params.id)
+  mdb
+    .db()
+    .collection('boards')
+    .findOne({_id: req.params.id}, (err, result) => {
+      if (err) {
+        console.log("id check err", err)
+        return res.status(500).json({err: "sigh, a vague error :("})
+      }
+      res.status(200).json({result: result})
+    })
+})
+
 app.post('/board', (req, res) => {
   mdb
     .db()

@@ -2,6 +2,7 @@ doctype html
 html
   head
     title atwater.yoga
+    link(rel="stylesheet" href="/css/create.css")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.0/es6-promise.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js")
   body
@@ -11,18 +12,18 @@ html
     form#board_form(method="POST" action="/board")
       div.form-group
         p board title
-        input#board_title(type="text", placeholder="board title")
+        input#board_title(type="text", placeholder="board title", required)
       div.form-group
         p board id (must be unique)
-        input#board_id(type="text", placeholder="board id")
+        input#board_id(type="text", placeholder="board id", required)
       div.form-group
         p admin email
-        input#board_admin_email(type="text", placeholder="admin email")
+        input#board_admin_email(type="text", placeholder="admin email", required)
       div.form-group
         p admin password
-        input#board_admin_pw(type="password")
+        input#board_admin_pw(type="password", required)
         p confirm password
-        input#board_admin_pw_conf(type="password")
+        input#board_admin_pw_conf(type="password", required)
       h2 BOARD SETTINGS
       div.form-group
         p features
@@ -39,7 +40,7 @@ html
         span board form private
         input#client_private(type="checkbox")
       div.form-group
-        input#board_submit(type="submit")
+        input#board_submit(type="submit", disabled)
     script(src="/js/create.js")
 
 
