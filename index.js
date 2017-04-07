@@ -24,15 +24,41 @@ app.get('/', (req, res) => {
 })
 
 app.post('/board', (req, res) => {
-  console.log(req.body)
   mdb
     .db()
     .collection('boards')
-    .insert(req.body, (err) => {
+    .insertOne(req.body, (err, insert) => {
       if (err) {
         console.log("board insertion err", err)
       }
-      res.redirect(`/admin/${req.body.name}`)
+      res.status(200).json(insert.ops[0])
+      // mdb.close()
+    })
+})
+
+app.get('/:id/admin', (req, res) => {
+  mdb
+    .db()
+    .collection('boards')
+    .findOne({_id : req.params.id}, (err, result) => {
+      if (err) {
+        console.log("admin findOne err", err)
+      }
+      res.render('admin', {board: result})
+      // mdb.close()
+    })
+})
+
+app.get('/:id/party', (req, res) => {
+  mdb
+    .db()
+    .collection('boards')
+    .findOne({_id : req.params.id}, (err, result) => {
+      if (err) {
+        console.log("client findOne err", err)
+      }
+      res.render('client', {board: result})
+      // mdb.close()
     })
 })
 

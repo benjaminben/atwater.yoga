@@ -10,8 +10,11 @@ html
     h2 CREATE BOARD
     form#board_form(method="POST" action="/board")
       div.form-group
-        p board name
-        input#board_name(type="text", placeholder="board name")
+        p board title
+        input#board_title(type="text", placeholder="board title")
+      div.form-group
+        p board id (must be unique)
+        input#board_id(type="text", placeholder="board id")
       div.form-group
         p admin email
         input#board_admin_email(type="text", placeholder="admin email")

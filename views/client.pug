@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title= board.title + " | party"
+  body
+    h1= board.title
+    if board.features.text
+      #text_block
+        p text
+        input(type="text" placeholder="text")
+        button submit text
+    if board.features.img_url
+      #img_url_block
+        p img (via url)
+        input(type="text" placeholder="img url")
+        button submit img
+    if board.features.img_upload
+      #img_upload_block
+        p img (mupload)
+        h2 coming soon af
+    img(src="/assets/partyPortal.svg")
+    script(src="/js/client.js")
