@@ -1,20 +1,21 @@
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+(function(){
+  var client = require('mongodb').MongoClient,
+      mongodb;
 
-var connect = function(user, pw) {
-  // Connection URL
-  var url = 'mongodb://'+user+':'+pw+'@ds155080.mlab.com:55080/atwateryoga';
-
-  // Use connect method to connect to the server
-  MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
-    console.log("Connected successfully to server");
-
-    db.close();
-  });
-
-  return MongoClient
-}
-
-
-module.exports = connect
+      module.exports = {
+        connect: function(creds, callback) {
+          var dburl = `mongodb://${creds.user}:${creds.pw}@ds155080.mlab.com:55080/atwateryoga`;
+          client.connect(dburl,
+            function(err, db){
+              mongodb = db;
+              if(callback) { callback(); }
+            });
+         },
+        db: function() {
+          return mongodb;
+        },
+        close: function() {
+          mongodb.close();
+        }
+      };
+})();
