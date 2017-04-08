@@ -6,21 +6,76 @@ const app     = express()
 const keys    = require('./keys')
 const mdb     = require('./db/MongoClient')
 
-app.set('port', process.env.PORT || 8080);
-const server = app.listen(app.get('port'), function(){
-  console.log('party on', app.get('port'));
-  mdb.connect({user: keys.mongo_user, pw: keys.mongo_pw}, function() {
-    console.log('Connected to MongoDB')
-  })
-});
-
+app.set('port', process.env.PORT || 8080)
 app.use(express.static('public'))
 app.use(bp.json())
-
 app.set('view engine', 'pug')
+
+const server = app.listen(app.get('port'), function(){
+  console.log('party on', app.get('port'));
+});
+
+const io = require('socket.io')(server)
+
+var Namespace = (slug) => {
+  console.log("making space")
+
+  var board  = io.of(`/${slug}`)
+  var client = io.of(`/${slug}/client`)
+  var admin = io.of(`/${slug}/admin`)
+
+  board.on('connection', (socket) => {
+    console.log('%s board connected', slug)
+  })
+
+  client.on('connection', (socket) => {
+    console.log('%s client connected', slug)
+    board.emit('client', Object.keys(board.sockets).length)
+  })
+
+  return({
+    board: board,
+    client: client,
+    admin: admin
+  })
+}
+
+mdb.connect({user: keys.mongo_user, pw: keys.mongo_pw}, function() {
+  console.log('Connected to MongoDB')
+  mdb
+    .db()
+    .collection('boards')
+    .find()
+    .toArray((err, results) => {
+      if (err) throw err;
+      results.forEach((b) => {
+        // TODO: THIS IS PROBABLY STUPID,
+        // BETTER TO CREATE NSP FOR ONLY
+        // BOARDS WITH ACTIVE CONNECTIONS
+        Namespace(b._id)
+      })
+    })
+})
 
 app.get('/', (req, res) => {
   res.render('create', {message: "hi pug"})
+})
+
+app.get('/favicon.ico', function(req, res) {
+    res.status(204);
+});
+
+app.get('/:id', (req, res) => {
+  mdb
+    .db()
+    .collection('boards')
+    .findOne({_id : req.params.id}, (err, result) => {
+      if (err) {
+        console.log("board findOne err", err)
+      }
+      res.render('board', {board: result})
+      // mdb.close()
+    })
 })
 
 app.get('/board/:id', (req, res) => {
