@@ -1,7 +1,8 @@
 const mdb = require('./mongo_client')
-const controlla = require('./controller')
 
-module.exports.initialize = (app, router) => {
+module.exports.initialize = (app, router, io) => {
+  var controlla = require('./controller')(io)
+
   router.get('/favicon.ico', function(req, res) {
       res.status(204);
   });
