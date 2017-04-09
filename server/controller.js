@@ -13,10 +13,15 @@ module.exports = (io) => {
           if (err) {
             console.log("board findOne err", err)
           }
-          if (!io.yogas[result._id]) {
-            io.yogas[result._id] = io.Namespace(result._id)
+          if (result) {
+            if (!io.nsps[`/${result._id}`]) {
+              io.Namespace(result._id)
+            }
+            res.render('board', {board: result})
           }
-          res.render('board', {board: result})
+          else {
+            res.redirect('/')
+          }
           // mdb.close()
         })
     },
@@ -28,10 +33,15 @@ module.exports = (io) => {
           if (err) {
             console.log("client findOne err", err)
           }
-          if (!io.yogas[result._id]) {
-            io.yogas[result._id] = io.Namespace(result._id)
+          if (result) {
+            if (!io.nsps[`/${result._id}`]) {
+              io.Namespace(result._id)
+            }
+            res.render('client', {board: result})
           }
-          res.render('client', {board: result})
+          else {
+            res.redirect('/')
+          }
           // mdb.close()
         })
     },
@@ -68,7 +78,7 @@ module.exports = (io) => {
           if (err) {
             console.log("board insertion err", err)
           }
-          io.nsps[insert.ops[0]._id] = io.Namespace(insert.ops[0]._id)
+          // io.Namespace(insert.ops[0]._id)
           res.status(200).json(insert.ops[0])
           // mdb.close()
         })

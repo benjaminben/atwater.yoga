@@ -31,25 +31,38 @@ module.exports = (server) => {
     var board  = io.of(`/${slug}`)
     var client = io.of(`/${slug}/client`)
     var admin = io.of(`/${slug}/admin`)
-    var cncts = 0
+
+    var deleteNsp = () => {
+      board.removeAllListeners()
+      client.removeAllListeners()
+      admin.removeAllListeners()
+
+      delete io.nsps[`/${slug}`]
+      delete io.nsps[`/${slug}/client`]
+      delete io.nsps[`/${slug}/admin`]
+    }
+
+    var checkConnections = () => {
+      var boardCnts = Object.keys(board.connected).length
+      var clientCnts = Object.keys(client.connected).length
+      var adminCnts = Object.keys(admin.connected).length
+
+      if (boardCnts === 0 && clientCnts === 0 && adminCnts === 0) {
+        deleteNsp()
+      }
+    }
 
     board.on('connection', (socket) => {
       console.log('%s board connected', slug)
-      cncts++
-
       socket.on('disconnect', () => {
-        cncts--
-        console.log('%s board disconnect: %s total cncts', slug, cncts)
+        checkConnections()
       })
     })
 
     client.on('connection', (socket) => {
       console.log('%s client connected', slug)
-      cncts++
-
       socket.on('disconnect', () => {
-        cncts--
-        console.log('%s client disconnect: %s total cncts', slug, cncts)
+        checkConnections()
       })
     })
 
@@ -57,7 +70,6 @@ module.exports = (server) => {
       board: board,
       client: client,
       admin: admin,
-      cncts: cncts
     })
   }
 
