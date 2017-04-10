@@ -2,7 +2,8 @@ doctype html
 html
   head
     title atwater.yoga
-    link(rel="stylesheet" href="/css/create.css")
+    link(rel="stylesheet" href="/css/src.bundle.css")
+    //- link(rel="stylesheet" href="/css/create.css")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.0/es6-promise.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js")
   body
@@ -41,6 +42,7 @@ html
         input#client_private(type="checkbox")
       div.form-group
         input#board_submit(type="submit", disabled)
-    script(src="/js/create.js")
+    script(src="/js/commons.js")
+    script(src="/js/create.bundle.js")
 
 

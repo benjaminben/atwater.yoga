@@ -3,9 +3,7 @@ const configure = require('./server/config')
 const keys      = require('./keys')
 const mdb       = require('./server/mongo_client')
 const routes    = require('./server/routes')
-const app       = express()
-
-app = configure(app)
+const app       = configure(express())
 
 const server = app.listen(app.get('port'), function(){
   console.log('party on', app.get('port'));

@@ -1,0 +1,13 @@
+#board_form input {
+  outline: none;
+}
+
+#board_id.searching {
+  box-shadow: 0px 0px 0px 5px yellow;
+}
+#board_id.taken {
+  box-shadow: 0px 0px 0px 5px red;
+}
+#board_id.available {
+  box-shadow: 0px 0px 0px 5px green;
+}
