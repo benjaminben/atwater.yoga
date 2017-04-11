@@ -31,6 +31,7 @@ module.exports = (server) => {
     var board  = io.of(`/${slug}`)
     var client = io.of(`/${slug}/client`)
     var admin = io.of(`/${slug}/admin`)
+    var els = []
 
     var deleteNsp = () => {
       board.removeAllListeners()
@@ -54,6 +55,7 @@ module.exports = (server) => {
 
     board.on('connection', (socket) => {
       console.log('%s board connected', slug)
+      board.emit('initEls', els)
       socket.on('disconnect', () => {
         checkConnections()
       })
@@ -65,7 +67,7 @@ module.exports = (server) => {
         checkConnections()
       })
       socket.on('el', (data) => {
-        console.log(data)
+        els.push(data)
         board.emit('el', data)
       })
     })
