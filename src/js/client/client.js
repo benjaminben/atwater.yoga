@@ -1,15 +1,16 @@
-// (function() {
-//   console.log("client")
-//   var socket = io('/'+document.body.getAttribute("data-slug")+'/client')
-// })()
 import React from 'react'
 import { render } from 'react-dom'
+import ClientForm from './components/ClientForm.jsx'
 
 const Root = () => {
+  const socket = io('/'+document.body.getAttribute("data-slug")+'/client')
   return(
-    <div>
-      hello
-    </div>
+    <ClientForm
+      socket={socket}
+      board={{
+        slug: document.body.getAttribute("data-slug"),
+        feats: window.yogaFeats
+      }} />
   )
 }
 

@@ -6,13 +6,19 @@ webpackJsonp([3],{
 "use strict";
 
 
-(function () {
-  console.log("board");
-  var socket = io('/' + document.body.getAttribute("data-slug"));
-  socket.on('client', function (data) {
-    console.log(data);
-  });
-})();
+var main = document.querySelector("main");
+
+var slug = document.body.getAttribute("data-slug");
+console.log(slug + " board");
+
+var socket = io("/" + slug);
+socket.on('el', function (data) {
+  console.log("new el:", data);
+
+  var node = document.createElement("span");
+  main.appendChild(node);
+  node.outerHTML = data;
+});
 
 /***/ })
 

@@ -64,6 +64,10 @@ module.exports = (server) => {
       socket.on('disconnect', () => {
         checkConnections()
       })
+      socket.on('el', (data) => {
+        console.log(data)
+        board.emit('el', data)
+      })
     })
 
     return({
