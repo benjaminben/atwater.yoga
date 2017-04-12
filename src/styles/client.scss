@@ -1,0 +1,26 @@
+#ClientForm {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+
+  header {
+    padding: 60px 0;
+
+    .title {
+      font-size: 2.33em;
+      margin-bottom: 0.33em;
+    }
+
+    .sub {
+
+      &:before, &:after {
+        content: '';
+        flex: 1;
+        height: 2px;
+        width: 100%;
+        background: black;
+        margin: auto 1em;
+      }
+    }
+  }
+}

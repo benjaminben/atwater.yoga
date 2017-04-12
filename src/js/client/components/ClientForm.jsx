@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import TextBlock from './TextBlock.jsx'
-import ImgUrlBlock from './ImgUrlBlock.jsx'
-import ImgUploadBlock from './ImgUploadBlock.jsx'
+import ClientBlock from './ClientBlock.jsx'
 
 class ClientForm extends Component {
   constructor(props) {
@@ -23,26 +21,22 @@ class ClientForm extends Component {
   render() {
     const board = this.props.board
     return(
-      <div className="client-form">
-        <h1>{board.slug}</h1>
+      <div id="ClientForm">
+        <header>
+          <h1 className="title text-center">{board.title}</h1>
+          <p className="sub flex">@yoga</p>
+        </header>
         {
           board.feats.text
           ?
-          <TextBlock emit={this.emitEl} />
+          <ClientBlock flavor={"text"} feats={board.feats} emit={this.emitEl} />
           :
           null
         }
         {
-          board.feats.img_url
+          board.feats.img_url || board.feats.img_upload
           ?
-          <ImgUrlBlock />
-          :
-          null
-        }
-        {
-          board.feats.img_upload
-          ?
-          <ImgUploadBlock />
+          <ClientBlock flavor={"img"} feats={board.feats} />
           :
           null
         }

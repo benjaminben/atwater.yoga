@@ -9,6 +9,7 @@ const Root = () => {
       socket={socket}
       board={{
         slug: document.body.getAttribute("data-slug"),
+        title: window.yogaTitle,
         feats: window.yogaFeats
       }} />
   )

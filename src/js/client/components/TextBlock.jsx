@@ -21,7 +21,7 @@ class TextBlock extends Component {
 
   render() {
     return(
-      <div onClick={() => this.props.emit(this.conjureEl("bloobs"))}>
+      <div className="block text" onClick={() => this.props.emit(this.conjureEl("bloobs"))}>
         text block
       </div>
     )

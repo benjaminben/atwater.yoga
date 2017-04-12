@@ -1,7 +1,134 @@
 $pink: rgba(240, 80, 120, 1);
 
-body {
-  background: $pink;
+html, body {
   height: 100%;
+}
+
+body {
   margin: 0;
+}
+
+p, h1, h2, h3, h4, h5 {
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.absolute {
+  position: absolute;
+}
+.relative {
+  position: relative;
+}
+.fixed {
+  position: fixed;
+}
+.block {
+  display: block;
+}
+.inline {
+  display: inline;
+}
+.inline-block {
+  display: inline-block;
+}
+.table {
+  display: table;
+}
+.inline-table {
+  display: inline-table;
+}
+.table-row {
+  display: table-row;
+}
+.table-cell {
+  display: table-cell;
+}
+.flex {
+  display: flex;
+}
+.inline-flex {
+  display: inline-flex;
+}
+.none {
+  display: none
+}
+
+.float-left {
+  float: left;
+}
+.float-right {
+  float: right;
+}
+.clear-both {
+  clear: both;
+}
+
+.row {
+  flex-flow: row wrap;
+}
+.column {
+  flex-flow: column wrap;
+}
+
+.justify-center {
+  justify-content: center;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.align-center {
+  align-items: center;
+}
+
+.width100 {
+  width: 100%
+}
+.height100 {
+  height: 100%
+}
+
+.v-top {
+  vertical-align: top;
+}
+.v-middle {
+  vertical-align: middle;
+}
+.v-bottom {
+  vertical-align: bottom;
+}
+
+.light {
+  font-weight: 200
+}
+.bold {
+  font-weight: bold
+}
+.italic {
+  font-style: italic
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.pointer {
+  cursor: pointer;
 }
