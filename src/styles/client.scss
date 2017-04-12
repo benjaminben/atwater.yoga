@@ -23,4 +23,23 @@
       }
     }
   }
+
+  .client-block {
+    .label {
+      height: 40px;
+
+      .switch {
+        .roto {
+          transform-origin: 50px 50px;
+          transition: transform 0.33s ease;
+        }
+
+        &.active {
+          .roto {
+            transform: rotateZ(90deg)
+          }
+        }
+      }
+    }
+  }
 }
