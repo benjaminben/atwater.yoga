@@ -9,7 +9,7 @@ class TextBlock extends Component {
 
     this.state = {
       color: "#000000",
-      fontScale: 0.5,
+      fontScale: 0.8,
       fontFam: "arial",
     }
 
@@ -38,6 +38,9 @@ class TextBlock extends Component {
   }
 
   render() {
+    let roundedFontSize = (this.state.fontScale * this.fontSizeMin +
+                           this.fontSizeMin).toFixed()
+
     let inputStyle = {
       color: this.state.color,
       fontFamily: this.state.fontFam,
@@ -45,11 +48,11 @@ class TextBlock extends Component {
 
     let sizeStyle = {
       color: this.state.color,
-      fontSize: `${this.state.fontScale * this.fontSizeMin + this.fontSizeMin}px`,
+      fontSize: `${roundedFontSize}px`,
     }
 
     return(
-      <div className="block text">
+      <div className="block text dashboard">
         <input className="block" style={inputStyle} defaultValue="Type something" />
         <div className="inline-block">
           <select className="block" value={this.state.fontFam} onChange={this.updateFontFam}>
@@ -58,7 +61,7 @@ class TextBlock extends Component {
             <option value="sans-serif" style={{fontFamily: 'sans-serif'}}>sans-serif</option>
           </select>
 
-          <p style={sizeStyle}>{`${this.state.fontScale * this.fontSizeMin + this.fontSizeMin}px`}</p>
+          <p style={sizeStyle}>{`${roundedFontSize}px`}</p>
           <PctSlider pct={this.state.fontScale} action={this.slideFontSize} />
         </div>
       </div>

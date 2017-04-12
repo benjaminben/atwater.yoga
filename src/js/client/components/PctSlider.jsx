@@ -28,14 +28,12 @@ class PctSlider extends Component {
   }
 
   inputUpdate(e) {
-    // console.log(this.state.startX, e.clientX)
-    let delta = (this.state.startX - e.clientX) *
-                (e.clientX < this.state.startX ? 1 : -1)
+    let delta = -(this.state.startX - e.clientX)
 
     if ((delta / 100 + this.props.pct) <= (this.range.end / 100) &&
         (delta / 100 + this.props.pct) >= (this.range.start / 100)) {
 
-      console.log(delta / 100)
+      this.setState({startX: e.clientX})
       this.props.action(delta / 100)
     }
   }
@@ -49,7 +47,7 @@ class PctSlider extends Component {
 
   render() {
     return(
-      <svg width={this.range.end + this.range.start} height="40" viewBox={`0 0 ${this.range.end + this.range.start} 20`}>
+      <svg className="slider-pct" width={this.range.end + this.range.start} height="40" viewBox={`0 0 ${this.range.end + this.range.start} 20`}>
         <line x1={this.range.start} x2={this.range.end} y1={10} y2={10} strokeWidth="4" stroke="black" />
         <circle ref={(el) => this.circ = el}
                 cx={this.props.pct * this.range.end + this.range.start}

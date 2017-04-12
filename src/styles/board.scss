@@ -1,0 +1,13 @@
+#Board {
+  height: 100%;
+
+  .el {
+    position: absolute;
+  }
+
+  .client-link {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
