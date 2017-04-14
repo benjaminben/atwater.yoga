@@ -50,6 +50,16 @@
 
     .dashboard {
       padding-bottom: 40px;
+
+      &.text {
+        .slider-pct {
+          width: 100%;
+        }
+
+        .color-picker {
+          margin-left: 60px;
+        }
+      }
     }
   }
 }

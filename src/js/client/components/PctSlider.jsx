@@ -21,7 +21,6 @@ class PctSlider extends Component {
 
   inputStart(e) {
     this.circ.removeEventListener("mousedown", this.inputStart)
-    console.log("down", e.clientX)
     this.setState({startX: e.clientX})
     window.addEventListener("mousemove", this.inputUpdate)
     window.addEventListener("mouseup", this.inputEnd)
@@ -39,7 +38,6 @@ class PctSlider extends Component {
   }
 
   inputEnd(e) {
-    console.log("up", e.clientX)
     window.removeEventListener("mousemove", this.inputUpdate)
     window.removeEventListener("mouseup", this.inputEnd)
     this.circ.addEventListener("mousedown", this.inputStart)

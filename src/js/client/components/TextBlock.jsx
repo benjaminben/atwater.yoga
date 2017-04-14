@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PctSlider from './PctSlider.jsx'
+import ColorPicker from './ColorPicker.jsx'
 
 class TextBlock extends Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class TextBlock extends Component {
       fontFam: "arial",
     }
 
-    this.slideFontSize = this.slideFontSize.bind(this)
+    this.updateColor = this.updateColor.bind(this)
+    this.updateFontSize = this.updateFontSize.bind(this)
     this.updateFontFam = this.updateFontFam.bind(this)
     this.conjureEl = this.conjureEl.bind(this)
   }
@@ -28,13 +30,23 @@ class TextBlock extends Component {
     let p = document.createElement("p")
     p.className = "el"
     p.textContent = text
+    p.style.color = this.state.color
+    p.style.fontSize = `${(this.state.fontScale * this.fontSizeMin + this.fontSizeMin).toFixed()}px`
+    p.style.fontFamily = this.state.fontFam
+
+    p.style.top = `${(Math.random() * 100).toFixed()}%`
+    p.style.left = `${(Math.random() * 100).toFixed()}%`
     return p
   }
 
-  slideFontSize(d) {
+  updateFontSize(d) {
     this.setState({
       fontScale: this.state.fontScale + d
     })
+  }
+
+  updateColor(hex) {
+    this.setState({color: hex})
   }
 
   render() {
@@ -53,7 +65,7 @@ class TextBlock extends Component {
 
     return(
       <div className="block text dashboard">
-        <input className="block" style={inputStyle} defaultValue="Type something" />
+        <input ref={(el) => this.txt = el} className="block" style={inputStyle} defaultValue="Type something" />
         <div className="inline-block">
           <select className="block" value={this.state.fontFam} onChange={this.updateFontFam}>
             <option value="courier" style={{fontFamily: 'courier'}}>courier</option>
@@ -62,8 +74,12 @@ class TextBlock extends Component {
           </select>
 
           <p style={sizeStyle}>{`${roundedFontSize}px`}</p>
-          <PctSlider pct={this.state.fontScale} action={this.slideFontSize} />
+          <PctSlider pct={this.state.fontScale} action={this.updateFontSize} />
         </div>
+        <div className="inline-block">
+          <ColorPicker action={this.updateColor} />
+        </div>
+        <button className="block" onClick={() => this.props.emit(this.conjureEl(this.txt.value))}>submit</button>
       </div>
     )
   }
