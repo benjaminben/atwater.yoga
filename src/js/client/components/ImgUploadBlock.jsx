@@ -17,6 +17,19 @@ class ImgUploadBlock extends Component {
     this.conjureEl = this.conjureEl.bind(this)
   }
 
+  conjureEl(src) {
+    let img = document.createElement("img")
+    img.className = "el"
+    img.src = src
+    img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
+    img.style.height = "auto"
+
+    img.style.top = `${(Math.random() * 100).toFixed()}%`
+    img.style.left = `${(Math.random() * 100).toFixed()}%`
+
+    return img
+  }
+
   postToImgur() {
     let fd = new FormData()
     fd.append("image", this.state.img_buff.replace(/^data:image\/(png|jpe?g|gif|svg);base64,/, ""))
@@ -41,19 +54,6 @@ class ImgUploadBlock extends Component {
     })
   }
 
-  conjureEl(src) {
-    let img = document.createElement("img")
-    img.className = "el"
-    img.src = src
-    img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
-    img.style.height = "auto"
-
-    img.style.top = `${(Math.random() * 100).toFixed()}%`
-    img.style.left = `${(Math.random() * 100).toFixed()}%`
-
-    return img
-  }
-
   previewUpload() {
     this.setState({
       img_buff: null,
@@ -65,8 +65,8 @@ class ImgUploadBlock extends Component {
     let imgType = file.type.split("/").pop()
     let orientation
 
-    reader.redDBURL = (e) => {
-      reader.removeEventListener("load", reader.readDBURL)
+    reader.didDBURL = (e) => {
+      reader.removeEventListener("load", reader.didDBURL)
 
       let image = new Image()
       image.onload = () => {
@@ -81,16 +81,16 @@ class ImgUploadBlock extends Component {
       image.src = reader.result
     }
 
-    reader.redAB = (e) => {
-      reader.removeEventListener("load", reader.redAB)
+    reader.didAB = (e) => {
+      reader.removeEventListener("load", reader.didAB)
       this.getOrientation(e.target.result, (ori) => {
         orientation = ori
-        reader.addEventListener("load", reader.redDBURL)
+        reader.addEventListener("load", reader.didDBURL)
         reader.readAsDataURL(file)
       })
     }
 
-    reader.addEventListener("load", reader.redAB)
+    reader.addEventListener("load", reader.didAB)
 
     if (file) {
       reader.readAsArrayBuffer(file)
@@ -98,18 +98,30 @@ class ImgUploadBlock extends Component {
   }
 
   resifyImage(img, imgType, orientation) {
-    console.log("that ori:", orientation)
+    console.log("dat ori:", orientation)
+    console.log("dat type:", imgType)
 
     let canvas = document.createElement("canvas")
+    let ctx = canvas.getContext("2d")
     let max_size = 1200
-    let width = img.width
-    let height = img.height
+    let width
+    let height
 
-    if (orientation === 6) {
-      width = img.height
-      height = img.width
+    // orient width / height
+    switch (orientation) {
+      case 6:
+        width = img.height
+        height = img.width
+        break
+      case 8:
+        width = img.height
+        height = img.width
+        break
+      default:
+        width = img.width
+        height = img.height
     }
-
+    // size bounding to spec
     if (width > height) {
       if (width > max_size) {
         height *= max_size / width
@@ -122,20 +134,24 @@ class ImgUploadBlock extends Component {
         height = max_size
       }
     }
-
+    // size canvas to bounding
     canvas.width = width
     canvas.height = height
 
-    let ctx = canvas.getContext("2d")
+    switch (orientation) {
+      case 6:
+        ctx.setTransform(0, 1, -1, 0, width, 0)
+        ctx.drawImage(img, 0, 0, height, width)
+        break
+      case 8:
+        ctx.setTransform(0, -1, 1, 0, 0, height)
+        ctx.drawImage(img, 0, 0, height, width)
+        break
+      default:
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
+        ctx.drawImage(img, 0, 0, width, height)
+    }
 
-    if (orientation === 6) {
-      ctx.setTransform(0, 1, -1, 0, width, 0)
-      ctx.drawImage(img, 0, 0, height, width)
-    }
-    else {
-      ctx.setTransform(1, 0, 0, 1, 0, 0)
-      ctx.drawImage(img, 0, 0, width, height)
-    }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
 
     let dataUrl = canvas.toDataURL(`image/${imgType}`)
@@ -199,7 +215,7 @@ class ImgUploadBlock extends Component {
                       :
                       this.postToImgur
                     }>
-              submit
+              {this.state.imgur_url ? "submit" : "generate url"}
             </button>
           )
           :
