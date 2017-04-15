@@ -64,7 +64,7 @@ class TextBlock extends Component {
     }
 
     return(
-      <div className="block text dashboard">
+      <div className={"text dashboard" + (this.props.open ? "" : " none")}>
         <input ref={(el) => this.txt = el} className="block" style={inputStyle} defaultValue="Type something" />
         <div className="inline-block">
           <select className="block" value={this.state.fontFam} onChange={this.updateFontFam}>

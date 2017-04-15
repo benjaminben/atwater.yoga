@@ -12,7 +12,7 @@ class ImgUploadBlock extends Component {
 
     this.previewUpload = this.previewUpload.bind(this)
     this.resifyImage = this.resifyImage.bind(this)
-    // this.dataURLToBlob = this.dataURLToBlob.bind(this)
+    this.getOrientation = this.getOrientation.bind(this)
     this.postToImgur = this.postToImgur.bind(this)
     this.conjureEl = this.conjureEl.bind(this)
   }
@@ -45,7 +45,7 @@ class ImgUploadBlock extends Component {
     let img = document.createElement("img")
     img.className = "el"
     img.src = src
-    img.style.width = `${(Math.random() * 40 + 10).toFixed()}vw`
+    img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
     img.style.height = "auto"
 
     img.style.top = `${(Math.random() * 100).toFixed()}%`
@@ -63,8 +63,11 @@ class ImgUploadBlock extends Component {
     let file = this.stin.files[0]
     let reader = new FileReader()
     let imgType = file.type.split("/").pop()
+    let orientation
 
-    reader.addEventListener("load", () => {
+    reader.redDBURL = (e) => {
+      reader.removeEventListener("load", reader.readDBURL)
+
       let image = new Image()
       image.onload = () => {
         // let gifs be gifs...
@@ -72,22 +75,40 @@ class ImgUploadBlock extends Component {
           this.setState({img_buff: reader.result})
         }
         else {
-          this.resifyImage(image, imgType)
+          this.resifyImage(image, imgType, orientation)
         }
       }
       image.src = reader.result
-    })
+    }
+
+    reader.redAB = (e) => {
+      reader.removeEventListener("load", reader.redAB)
+      this.getOrientation(e.target.result, (ori) => {
+        orientation = ori
+        reader.addEventListener("load", reader.redDBURL)
+        reader.readAsDataURL(file)
+      })
+    }
+
+    reader.addEventListener("load", reader.redAB)
 
     if (file) {
-      reader.readAsDataURL(file)
+      reader.readAsArrayBuffer(file)
     }
   }
 
-  resifyImage(img, imgType) {
+  resifyImage(img, imgType, orientation) {
+    console.log("that ori:", orientation)
+
     let canvas = document.createElement("canvas")
     let max_size = 1200
     let width = img.width
     let height = img.height
+
+    if (orientation === 6) {
+      width = img.height
+      height = img.width
+    }
 
     if (width > height) {
       if (width > max_size) {
@@ -104,37 +125,45 @@ class ImgUploadBlock extends Component {
 
     canvas.width = width
     canvas.height = height
-    canvas.getContext("2d").drawImage(img, 0, 0, width, height)
+
+    let ctx = canvas.getContext("2d")
+
+    if (orientation === 6) {
+      ctx.setTransform(0, 1, -1, 0, width, 0)
+      ctx.drawImage(img, 0, 0, height, width)
+    }
+    else {
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.drawImage(img, 0, 0, width, height)
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
 
     let dataUrl = canvas.toDataURL(`image/${imgType}`)
-    // let resizedImage = this.dataURLToBlob(dataUrl)
     this.setState({img_buff: dataUrl})
   }
 
-  // dataURLToBlob(data) {
-  //   let BASE64_MARKER = ";base64,"
-
-  //   if (data.indexOf(BASE64_MARKER) === -1) {
-  //     let parts = data.split(",")
-  //     let contentType = parts[0].split(":")[1]
-  //     let raw = parts[1]
-
-  //     return new Blob([raw], {type: contentType})
-  //   }
-
-  //   let parts = data.split(BASE64_MARKER)
-  //   let contentType = parts[0].split(":")[1]
-  //   let raw = window.atob(parts[1])
-  //   let rawLength = raw.length
-
-  //   let uInt8Array = new Uint8Array(rawLength)
-
-  //   for (let i = 0; i < rawLength; i++) {
-  //     uInt8Array[i] = raw.charCodeAt(i)
-  //   }
-
-  //   return new Blob(uInt8Array, {type: contentType})
-  // }
+  getOrientation(result, callback) {
+    var view = new DataView(result);
+    if (view.getUint16(0, false) != 0xFFD8) return callback(-2);
+    var length = view.byteLength, offset = 2;
+    while (offset < length) {
+      var marker = view.getUint16(offset, false);
+      offset += 2;
+      if (marker == 0xFFE1) {
+        if (view.getUint32(offset += 2, false) != 0x45786966) return callback(-1);
+        var little = view.getUint16(offset += 6, false) == 0x4949;
+        offset += view.getUint32(offset + 4, little);
+        var tags = view.getUint16(offset, little);
+        offset += 2;
+        for (var i = 0; i < tags; i++)
+          if (view.getUint16(offset + (i * 12), little) == 0x0112)
+            return callback(view.getUint16(offset + (i * 12) + 8, little));
+      }
+      else if ((marker & 0xFF00) != 0xFF00) break;
+      else offset += view.getUint16(offset, false);
+    }
+    return callback(-1);
+  }
 
   render() {
     return(

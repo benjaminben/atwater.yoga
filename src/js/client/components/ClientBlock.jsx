@@ -23,13 +23,23 @@ class ClientBlock extends Component {
   render() {
     const blockType = (flav) => {
       let comp
+      let emit  = this.props.emit
+      let feats = this.props.feats
+      let open  = this.state.open
+      // important to use open to determine whether {display: none}
+      // rather than not render component at all - this preserves
+      // component input when user minimizes the block
 
       switch (flav) {
         case "text":
-          comp = <TextBlock emit={this.props.emit} feats={this.props.feats} />
+          comp = <TextBlock emit={emit}
+                            feats={feats}
+                            open={open} />
           break
         case "image":
-          comp = <ImgBlock emit={this.props.emit} feats={this.props.feats} />
+          comp = <ImgBlock emit={emit}
+                           feats={feats}
+                           open={open} />
           break
       }
 
@@ -42,13 +52,7 @@ class ClientBlock extends Component {
           <span className="inline-block v-middle">{this.props.flavor}</span>
           <BlockSwitch toggle={this.toggleBlock} open={this.state.open} />
         </div>
-        {
-          this.state.open
-          ?
-          blockType(this.props.flavor)
-          :
-          null
-        }
+        { blockType(this.props.flavor) }
       </div>
     )
   }

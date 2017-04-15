@@ -1,3 +1,5 @@
+import io from 'socket.io-client'
+
 import React from 'react'
 import { render } from 'react-dom'
 import ClientForm from './components/ClientForm.jsx'
