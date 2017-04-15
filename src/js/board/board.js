@@ -1,3 +1,5 @@
+import io from 'socket.io-client'
+
 let main = document.querySelector("main")
 
 const slug = document.body.getAttribute("data-slug")

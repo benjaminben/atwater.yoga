@@ -64,6 +64,18 @@
   }
 }
 
+#ImgUrlBlock {
+  padding-bottom: 40px;
+
+  .error {
+    color: red
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
+
 #ImgUploadBlock {
   img {
     max-width: 100%;

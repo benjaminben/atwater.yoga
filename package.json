@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",
-    "exif-js": "^2.2.1",
     "express": "^4.15.2",
     "mongodb": "^2.2.25",
     "promise-polyfill": "^6.0.2",

@@ -184,9 +184,11 @@ class ImgUploadBlock extends Component {
   render() {
     return(
       <div id="ImgUploadBlock">
+        <label htmlFor="img_upload">Camera / Upload:</label>
         <input ref={(el) => this.stin = el}
                onChange={this.previewUpload}
-               type="file" accept="image/*" />
+               type="file" accept="image/*"
+               name="img_upload" className="block" />
         {
           this.state.img_buff
           ?
