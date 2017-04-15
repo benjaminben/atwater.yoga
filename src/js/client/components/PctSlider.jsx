@@ -23,7 +23,10 @@ class PctSlider extends Component {
   inputStart(e) {
     this.circ.removeEventListener("mousedown", this.inputStart)
     this.circ.removeEventListener("touchstart", this.inputStart)
-    this.setState({startX: e.clientX})
+
+    let startX = e.type === "touchstart" ? e.targetTouches[0].clientX : e.clientX
+    this.setState({startX: startX})
+
     window.addEventListener("mousemove", this.inputUpdate)
     window.addEventListener("touchmove", this.inputUpdate)
     window.addEventListener("mouseup", this.inputEnd)
@@ -31,12 +34,15 @@ class PctSlider extends Component {
   }
 
   inputUpdate(e) {
-    let delta = -(this.state.startX - e.clientX)
+    let evt = (e.type === "touchmove" || e.type === "touchstart")
+              ? e.targetTouches[0] : e
+
+    let delta = -(this.state.startX - evt.clientX)
 
     if ((delta / 100 + this.props.pct) <= (this.range.end / 100) &&
         (delta / 100 + this.props.pct) >= (this.range.start / 100)) {
 
-      this.setState({startX: e.clientX})
+      this.setState({startX: evt.clientX})
       this.props.action(delta / 100)
     }
   }

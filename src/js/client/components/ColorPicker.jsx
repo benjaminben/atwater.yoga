@@ -33,21 +33,27 @@ class ColorPicker extends Component {
     }
 
     this.map.addEventListener("mousedown", this.inputStart)
+    this.map.addEventListener("touchstart", this.inputStart)
   }
 
   inputStart(e) {
     this.inputUpdate(e)
 
     this.map.removeEventListener("mousedown", this.inputStart)
+    this.map.removeEventListener("touchstart", this.inputStart)
     window.addEventListener("mousemove", this.inputUpdate)
+    window.addEventListener("touchmove", this.inputUpdate)
     window.addEventListener("mouseup", this.inputEnd)
+    window.addEventListener("touchend", this.inputEnd)
   }
 
   inputUpdate(e) {
+    let evt = (e.type === "touchmove" || e.type === "touchstart")
+              ? e.targetTouches[0] : e
     let rect = this.map.getBoundingClientRect()
     let blob = this.context.getImageData(
-                  (e.clientX - rect.left),
-                  (e.clientY - rect.top),
+                  (evt.clientX - rect.left),
+                  (evt.clientY - rect.top),
                   1, 1
                ).data
     let hex = "#" + ("000000" + this.rgbToHex(blob[0], blob[1], blob[2])).slice(-6)
@@ -56,8 +62,11 @@ class ColorPicker extends Component {
 
   inputEnd(e) {
     window.removeEventListener("mousemove", this.inputUpdate)
+    window.removeEventListener("touchmove", this.inputUpdate)
     window.removeEventListener("mouseup", this.inputEnd)
+    window.removeEventListener("touchend", this.inputEnd)
     this.map.addEventListener("mousedown", this.inputStart)
+    this.map.addEventListener("touchstart", this.inputStart)
   }
 
   rgbToHex(r, g, b) {
