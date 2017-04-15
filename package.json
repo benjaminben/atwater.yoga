@@ -12,10 +12,12 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "mongodb": "^2.2.25",
+    "promise-polyfill": "^6.0.2",
     "pug": "^2.0.0-beta11",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

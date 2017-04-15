@@ -36,7 +36,7 @@ class ClientForm extends Component {
         {
           board.feats.img_url || board.feats.img_upload
           ?
-          <ClientBlock flavor={"image"} feats={board.feats} />
+          <ClientBlock flavor={"image"} feats={board.feats} emit={this.emitEl} />
           :
           null
         }
