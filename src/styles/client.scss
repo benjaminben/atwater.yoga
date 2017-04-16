@@ -81,3 +81,13 @@
     max-width: 100%;
   }
 }
+
+#DoodleBlock {
+  .doodle-box canvas {
+    width: 100vw;
+    height: 100vw;
+    max-width: 300px;
+    max-height: 300px;
+    border: 1px solid black;
+  }
+}

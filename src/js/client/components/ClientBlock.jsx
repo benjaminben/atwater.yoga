@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import TextBlock from './TextBlock.jsx'
 import ImgBlock from './ImgBlock.jsx'
+import DoodleBlock from './DoodleBlock.jsx'
 import BlockSwitch from './BlockSwitch.jsx'
 
 class ClientBlock extends Component {
@@ -41,6 +42,10 @@ class ClientBlock extends Component {
                            feats={feats}
                            open={open} />
           break
+        case "doodle":
+          comp = <DoodleBlock emit={emit}
+                              feats={feats}
+                              open={open} />
       }
 
       return comp
