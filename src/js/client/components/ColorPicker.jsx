@@ -48,6 +48,9 @@ class ColorPicker extends Component {
   }
 
   inputUpdate(e) {
+    // prevent scrolling
+    e.preventDefault()
+
     let evt = (e.type === "touchmove" || e.type === "touchstart")
               ? e.targetTouches[0] : e
     let rect = this.map.getBoundingClientRect()

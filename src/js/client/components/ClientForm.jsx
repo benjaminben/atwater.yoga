@@ -43,7 +43,7 @@ class ClientForm extends Component {
         {
           board.feats.doodle
           ?
-          <ClientBlock flavor={"doodle"} feats={board.feats} />
+          <ClientBlock flavor={"doodle"} feats={board.feats} emit={this.emitEl} />
           :
           null
         }

@@ -31,6 +31,9 @@ class DoodleBox extends Component {
   }
 
   inputUpdate(e) {
+    // prevent scrolling
+    e.preventDefault()
+
     let evt = (e.type === "touchmove" || e.type === "touchstart")
               ? e.targetTouches[0] : e
     let rect = this.map.getBoundingClientRect()
@@ -41,9 +44,8 @@ class DoodleBox extends Component {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top
       }
-      console.log(coords)
       this.plots.push(coords)
-      this.draw(this.plots)
+      this.draw(this.plots, e.type)
     }
   }
 
@@ -56,23 +58,25 @@ class DoodleBox extends Component {
     window.removeEventListener("touchend", this.inputEnd)
     this.map.addEventListener("mousedown", this.inputStart)
     this.map.addEventListener("touchstart", this.inputStart)
+
+    this.props.action(this.map.toDataURL("image/png"))
   }
 
-  draw(plots) {
-    console.log("bish")
-
+  draw(plots, type) {
     this.context.strokeStyle = this.props.color
     this.context.lineJoin = "round"
+    this.context.lineCap = "round"
     this.context.lineWidth = 5
 
     this.context.beginPath()
-    this.context.moveTo(plots[0].x, plots[0].y)
 
     for (let i = 0; i < plots.length; i++) {
+      if (i) {
+        this.context.moveTo(plots[i-1].x, plots[i-1].y)
+      }
       this.context.lineTo(plots[i].x, plots[i].y)
+      this.context.stroke()
     }
-    // this.context.closePath()
-    this.context.stroke()
   }
 
   clear() {
