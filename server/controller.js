@@ -1,3 +1,4 @@
+const bc  = require('bcrypt-nodejs')
 const mdb = require('./mongo_client')
 
 module.exports = (io) => {
@@ -71,10 +72,15 @@ module.exports = (io) => {
         })
     },
     postBoard: (req, res) => {
+      var board = req.body
+      var hash = bc.hashSync(req.body.admin.password)
+
+      board.admin.password = hash
+
       mdb
         .db()
         .collection('boards')
-        .insertOne(req.body, (err, insert) => {
+        .insertOne(board, (err, insert) => {
           if (err) {
             console.log("board insertion err", err)
           }

@@ -2,6 +2,7 @@ doctype html
 html
   head
     title= "admin | " + board.title
+    link(rel="stylesheet" href="/css/src.bundle.css")
   body
     h1= board.title
     h2 admin
@@ -20,12 +21,18 @@ html
         input#board_admin_pw_conf(type="password", value= board.admin.password)
       div.form-group
         p features
-        span text
-        input#board_features_text(type="checkbox" checked= board.features.text)
-        span img via url
-        input#board_features_img_url(type="checkbox" checked= board.features.img_url)
-        span img upload
-        input#board_features_img_upload(type="checkbox" checked= board.features.img_upload)
+        #board_features_text
+          span text
+          input(type="checkbox" checked= board.features.text)
+        #board_features_img_url
+          span img via url
+          input(type="checkbox" checked= board.features.img_url)
+        #board_features_img_upload
+          span img upload
+          input(type="checkbox" checked= board.features.img_upload)
+        #board_features_doodle.block
+          span doodle
+          input(type="checkbox" checked= board.features.doodle)
 
         p privacy
         span board private
