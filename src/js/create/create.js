@@ -42,7 +42,8 @@
     blob.features = {
       text: document.getElementById("board_features_text").checked,
       img_url: document.getElementById("board_features_img_url").checked,
-      img_upload: document.getElementById("board_features_img_upload").checked
+      img_upload: document.getElementById("board_features_img_upload").checked,
+      doodle: document.getElementById("board_features_doodle").checked
     }
     blob.privacy = {
       board: document.getElementById("board_private").checked,

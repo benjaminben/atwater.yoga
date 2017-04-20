@@ -10,10 +10,13 @@ module.exports.initialize = (app, router, io) => {
   router.get('/', controlla.showCreate)
   router.get('/:id', controlla.showBoard)
   router.get('/:id/admin', controlla.showAdmin)
+  router.get('/:id/:type/auth', controlla.showAuth)
   router.get('/:id/party', controlla.showClient)
 
   router.get('/board/:id', controlla.findBoard)
   router.post('/board', controlla.postBoard)
+
+  router.post('/:id/admin/auth', controlla.authAdmin)
 
   app.use('/', router)
 }

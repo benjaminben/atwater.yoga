@@ -2,7 +2,7 @@ const bc  = require('bcrypt-nodejs')
 const mdb = require('./mongo_client')
 
 module.exports = (io) => {
-  return {
+  var cntrl = {
     showCreate: (req, res) => {
       res.render('create', {message: "hi pug"})
     },
@@ -47,6 +47,34 @@ module.exports = (io) => {
         })
     },
     showAdmin: (req, res) => {
+      console.log(req.cookies["yogaAdmin"])
+      if (req.cookies["yogaAdmin"]) {
+        var adminArray = JSON.parse(req.cookies["yogaAdmin"])
+        if (adminArray.indexOf(req.params.id) > -1) {
+          cntrl.fetchAndRenderAdmin(req, res)
+        }
+        else {
+          res.redirect(`/${req.params.id}/admin/auth`)
+        }
+      }
+      else {
+        res.redirect(`/${req.params.id}/admin/auth`)
+      }
+
+      // try {
+      //   if (adminArray.indexOf(req.params.id) > -1) {
+      //   }
+      // }
+      // catch (e) {
+      //   throw e
+      // }
+    },
+    showAuth: (req, res) => {
+      res.render("auth_admin", {
+        slug: req.params.id
+      })
+    },
+    fetchAndRenderAdmin: (req, res) => {
       mdb
         .db()
         .collection('boards')
@@ -89,5 +117,50 @@ module.exports = (io) => {
           // mdb.close()
         })
     },
+    authAdmin: (req, res) => {
+      mdb
+        .db()
+        .collection('boards')
+        .findOne({_id: req.params.id}, (err, result) => {
+          if (err) {
+            console.log("admin auth err", err)
+          }
+
+          if (req.body.user.email.toLowerCase() !==
+              result.admin.email.toLowerCase()) {
+            res.render('auth_admin', {
+              error: "wrong email address",
+              slug: req.params.id
+            })
+            return
+          }
+
+          bc.compare(req.body.user.password, result.admin.password , (err, check) => {
+            console.log(result._id)
+            if (check) {
+              if (req.cookies["yogaAdmin"]) {
+                console.log
+                var adminArray = JSON.parse(req.cookies["yogaAdmin"])
+                adminArray.push(result._id)
+                adminArray = JSON.stringify(adminArray)
+                res.cookie('yogaAdmin', adminArray, {maxAge: 900000, httpOnly: true})
+                res.redirect(`/${result._id}/admin`)
+              }
+              else {
+                res.cookie('yogaAdmin', JSON.stringify([result._id]), {maxAge: 900000, httpOnly: true})
+                res.redirect(`/${result._id}/admin`)
+              }
+            }
+            else {
+              res.render('auth_admin', {
+                error: "wrong password",
+                slug: req.params.id
+              })
+            }
+          })
+        })
+    }
   }
+
+  return cntrl
 }

@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title= "admin | auth"
+    link(rel="stylesheet" href="/css/src.bundle.css")
+  body
+    if error
+      p(style="color:red")= error
+    form(method="POST" action= "/" + slug + "/admin/auth")
+      input(name="user[email]" type="email" placeholder="admin email")
+      input(name="user[password]" type="password" placeholder="board password")
+      input(type="submit" value="submit")
