@@ -8,25 +8,26 @@ class ImgUrlBlock extends Component {
 
     this.state = {
       url: null,
-      err: null
+      err: null,
+      filter: false,
     }
 
     this.handleInput = this.handleInput.bind(this)
-    this.conjureEl = this.conjureEl.bind(this)
+    // this.conjureEl = this.conjureEl.bind(this)
   }
 
-  conjureEl(src) {
-    let img = document.createElement("img")
-    img.className = "el"
-    img.src = src
-    img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
-    img.style.height = "auto"
+  // conjureEl(src) {
+  //   let img = document.createElement("img")
+  //   img.className = "el"
+  //   img.src = src
+  //   img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
+  //   img.style.height = "auto"
 
-    img.style.top = `${(Math.random() * 100).toFixed()}%`
-    img.style.left = `${(Math.random() * 100).toFixed()}%`
+  //   img.style.top = `${(Math.random() * 100).toFixed()}%`
+  //   img.style.left = `${(Math.random() * 100).toFixed()}%`
 
-    return img
-  }
+  //   return img
+  // }
 
   handleInput(e) {
     this.setState({err: null})
@@ -86,9 +87,14 @@ class ImgUrlBlock extends Component {
           ?
           <div>
             <img src={this.state.url} />
+            <label htmlFor="filter">filter:</label>
+            <input name="filter" type="checkbox"
+                   onChange={() => {
+                     this.setState({filter: !this.state.filter})
+                   }} />
             <button className="block"
                     onClick={
-                      () => this.props.emit(this.conjureEl(this.state.url))}>
+                      () => this.props.emit(this.props.conjureEl(this.state.url, this.state.filter))}>
               submit
             </button>
           </div>

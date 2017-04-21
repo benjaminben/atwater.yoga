@@ -1,8 +1,17 @@
 #Board {
+  position: absolute;
+  top: 0; left: 0;
   height: 100%;
+  width: 100%;
+  overflow: hidden;
 
   .el {
     position: absolute;
+  }
+
+  p.el {
+    width: 90%;
+    max-width: 500px;
   }
 
   .client-link {

@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
-let main = document.querySelector("main")
-let elCap = 10
+let main = document.getElementById("Board")
+let elCap = 75
 
 const slug = document.body.getAttribute("data-slug")
 console.log(`${slug} board`)

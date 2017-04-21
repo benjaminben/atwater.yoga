@@ -8,27 +8,28 @@ class ImgUploadBlock extends Component {
       img_buff: null,
       imgur_url: null,
       uploading: false,
+      filter: false,
     }
 
     this.previewUpload = this.previewUpload.bind(this)
     this.resifyImage = this.resifyImage.bind(this)
     this.getOrientation = this.getOrientation.bind(this)
     this.postToImgur = this.postToImgur.bind(this)
-    this.conjureEl = this.conjureEl.bind(this)
+    // this.conjureEl = this.conjureEl.bind(this)
   }
 
-  conjureEl(src) {
-    let img = document.createElement("img")
-    img.className = "el"
-    img.src = src
-    img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
-    img.style.height = "auto"
+  // conjureEl(src) {
+  //   let img = document.createElement("img")
+  //   img.className = "el"
+  //   img.src = src
+  //   img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
+  //   img.style.height = "auto"
 
-    img.style.top = `${(Math.random() * 100).toFixed()}%`
-    img.style.left = `${(Math.random() * 100).toFixed()}%`
+  //   img.style.top = `${(Math.random() * 100).toFixed()}%`
+  //   img.style.left = `${(Math.random() * 100).toFixed()}%`
 
-    return img
-  }
+  //   return img
+  // }
 
   postToImgur() {
     let fd = new FormData()
@@ -206,19 +207,40 @@ class ImgUploadBlock extends Component {
             ?
             <span>uploading...</span>
             :
-            <button className="block"
-                    style={{
-                      background: this.state.imgur_url ? "green" : "pink"
-                    }}
-                    onClick={
-                      this.state.imgur_url
-                      ?
-                      () => this.props.emit(this.conjureEl(this.state.imgur_url))
-                      :
-                      this.postToImgur
-                    }>
-              {this.state.imgur_url ? "submit" : "generate url"}
-            </button>
+            (
+              this.state.imgur_url
+              ?
+              <div>
+                <label htmlFor="filter">filter:</label>
+                <input name="filter" type="checkbox" onChange={() => {
+                  this.setState({filter: !this.state.filter})
+                }} />
+                <button className="block"
+                        style={{
+                          background: "green"
+                        }}
+                        onClick={
+                          () =>
+                            this.props.emit(
+                              this.props.conjureEl(
+                                this.state.imgur_url,
+                                this.state.filter
+                              )
+                            )
+                        }>
+                  submit
+                </button>
+              </div>
+              :
+              <button className="block"
+                      style={{
+                        background: "pink"
+                      }}
+                      onClick={this.postToImgur}>
+                generate url
+              </button>
+            )
+
           )
           :
           null
