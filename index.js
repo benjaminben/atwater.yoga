@@ -5,12 +5,12 @@ const mdb       = require('./server/mongo_client')
 const routes    = require('./server/routes')
 const app       = configure(express())
 
-const server = app.listen(app.get('port'), function(){
+const server = app.listen(app.get('port'), () => {
   console.log('party on', app.get('port'));
   var io = require('./server/io')(server)
   routes.initialize(app, new express.Router(), io)
 
-  mdb.connect({user: keys.mongo_user, pw: keys.mongo_pw}, function() {
+  mdb.connect({user: keys.mongo_user, pw: keys.mongo_pw}, () => {
     console.log('Connected to MongoDB')
   })
 });

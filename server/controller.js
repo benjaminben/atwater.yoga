@@ -30,7 +30,9 @@ module.exports = (io) => {
       mdb
         .db()
         .collection('boards')
-        .findOne({_id : req.params.id}, (err, result) => {
+        // suppress fetching els for client (faster load)
+        .findOne({_id : req.params.id}, {els: 0}, (err, result) => {
+          console.log("rez", result)
           if (err) {
             console.log("client findOne err", err)
           }
@@ -47,7 +49,7 @@ module.exports = (io) => {
         })
     },
     showAdmin: (req, res) => {
-      console.log(req.cookies["yogaAdmin"])
+      // console.log(req.cookies["yogaAdmin"])
       if (req.cookies["yogaAdmin"]) {
         var adminArray = JSON.parse(req.cookies["yogaAdmin"])
         if (adminArray.indexOf(req.params.id) > -1) {
@@ -60,16 +62,8 @@ module.exports = (io) => {
       else {
         res.redirect(`/${req.params.id}/admin/auth`)
       }
-
-      // try {
-      //   if (adminArray.indexOf(req.params.id) > -1) {
-      //   }
-      // }
-      // catch (e) {
-      //   throw e
-      // }
     },
-    showAuth: (req, res) => {
+    showAuthAdmin: (req, res) => {
       res.render("auth_admin", {
         slug: req.params.id
       })
@@ -78,7 +72,7 @@ module.exports = (io) => {
       mdb
         .db()
         .collection('boards')
-        .findOne({_id : req.params.id}, (err, result) => {
+        .findOne({_id : req.params.id}, {els: 0}, (err, result) => {
           if (err) {
             console.log("admin findOne err", err)
           }
@@ -115,7 +109,6 @@ module.exports = (io) => {
           if (err) {
             console.log("board insertion err", err)
           }
-          // io.Namespace(insert.ops[0]._id)
           res.status(200).json(insert.ops[0])
           // mdb.close()
         })
@@ -139,7 +132,7 @@ module.exports = (io) => {
           }
 
           bc.compare(req.body.user.password, result.admin.password , (err, check) => {
-            console.log(result._id)
+            // console.log(result._id)
             if (check) {
               if (req.cookies["yogaAdmin"]) {
                 console.log
@@ -163,10 +156,6 @@ module.exports = (io) => {
           })
         })
     },
-    // wipeBoard: (req, res) => {
-    //   var nsp = io.nsps[`/${req.params.id}`]
-    //   nsp.emit()
-    // }
   }
 
   return cntrl

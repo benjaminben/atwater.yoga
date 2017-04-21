@@ -4,7 +4,7 @@ const slug = document.body.getAttribute("data-slug")
 const socket = io(`/${slug}`)
 
 let main = document.getElementById("Board")
-let elCap = 10
+let elCap = 75
 
 const pasteEl = (html) => {
   let node = document.createElement('span');
