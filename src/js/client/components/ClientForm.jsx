@@ -47,6 +47,11 @@ class ClientForm extends Component {
           :
           null
         }
+
+        <div className="bug-link text-center">
+          <a href="https://gitreports.com/issue/benjaminben/atwater.yoga"
+             target="_blank">please report bugs!</a>
+        </div>
       </div>
     )
   }

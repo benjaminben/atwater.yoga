@@ -18,5 +18,7 @@ module.exports.initialize = (app, router, io) => {
 
   router.post('/:id/admin/auth', controlla.authAdmin)
 
+  // router.get('/:id/admin/wipe', controlla.wipeBoard)
+
   app.use('/', router)
 }

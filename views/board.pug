@@ -2,10 +2,11 @@ doctype html
 html
   head
     title= board.title + " | @yoga"
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel="stylesheet" href="/css/src.bundle.css")
-    script(src="https://cdn.socket.io/socket.io-1.4.5.js")
-    script(src="/js/commons.js")
+    //- script(src="https://cdn.socket.io/socket.io-1.4.5.js")
   body(data-slug= board._id)
     #Board
-      a.client-link(href="/"+board._id+"/party")= "atwater.yoga/"+board._id+"/party"
+    a.client-link(href="/"+board._id+"/party")= "atwater.yoga/"+board._id+"/party"
+    script(src="/js/commons.js")
     script(src="/js/board.bundle.js")

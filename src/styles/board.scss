@@ -1,3 +1,9 @@
+.client-link {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
 #Board {
   position: absolute;
   top: 0; left: 0;
@@ -7,16 +13,33 @@
 
   .el {
     position: absolute;
+    animation: glow-in 0.5s ease;
+
+    &.glow-out {
+      animation: glow-out 0.5s forwards ease;
+    }
   }
 
   p.el {
     width: 90%;
     max-width: 500px;
   }
+}
 
-  .client-link {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+@keyframes glow-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10%)
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%)
+  }
+}
+
+@keyframes glow-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10%)
   }
 }

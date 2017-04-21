@@ -1,37 +1,17 @@
-// var els = [];
-
-// app.get('/els', function(req, res){
-//   res.send(els);
-// });
-
-// io_party_form.on('connection', function(socket) {
-//   socket.on('el', function(data){
-//     els.push(data.html);
-//     io_party.emit('push', data);
-//   });
-
-//   socket.on('func', function(data) {
-//     io_party.emit('func', data)
-//   })
-// });
-
-// io_party.on('connection', function(socket) {
-//   socket.on('pop', function(data){
-//     els.shift()
-//   });
-// });
+const mdb = require('./mongo_client')
 
 module.exports = (server) => {
   var io = require('socket.io')(server)
   io.yogas = {}
 
-  io.Namespace = (slug) => {
+  io.Namespace = (dbBoard) => {
     console.log("making space")
 
+    var slug = dbBoard._id
     var board  = io.of(`/${slug}`)
     var client = io.of(`/${slug}/client`)
     var admin = io.of(`/${slug}/admin`)
-    var els = []
+    var els = (dbBoard.els && dbBoard.els.length) ? dbBoard.els : []
 
     var deleteNsp = () => {
       board.removeAllListeners()
@@ -41,6 +21,8 @@ module.exports = (server) => {
       delete io.nsps[`/${slug}`]
       delete io.nsps[`/${slug}/client`]
       delete io.nsps[`/${slug}/admin`]
+
+      console.log("deleted %s", slug)
     }
 
     var checkConnections = () => {
@@ -49,29 +31,53 @@ module.exports = (server) => {
       var adminCnts = Object.keys(admin.connected).length
 
       if (boardCnts === 0 && clientCnts === 0 && adminCnts === 0) {
-        deleteNsp()
+        mdb
+          .db()
+          .collection("boards")
+          .update({_id: slug}, {$set: {els: els}}, (err, result) => {
+            if (err) {
+              console.log("board update err", err)
+              return
+            }
+            console.log(`board els updated ${result} deleting nsp`)
+            deleteNsp()
+          })
       }
     }
 
     board.on('connection', (socket) => {
       console.log('%s board connected', slug)
+      socket.on('disconnect', () => {
+        // console.log("%s board disconnect", slug)
+        checkConnections()
+      })
       socket.emit('initEls', els)
       socket.on('pop', (data) => {
         els.shift()
-      })
-      socket.on('disconnect', () => {
-        checkConnections()
       })
     })
 
     client.on('connection', (socket) => {
       console.log('%s client connected', slug)
       socket.on('disconnect', () => {
+        // console.log("%s client disconnect", slug)
         checkConnections()
       })
       socket.on('el', (data) => {
         els.push(data)
         board.emit('el', data)
+      })
+    })
+
+    admin.on('connection', (socket) => {
+      console.log('%s admin connected', slug)
+      socket.on('disconnect', () => {
+        // console.log("%s admin disconnect", slug)
+        checkConnections()
+      })
+      socket.on('wipe', (data) => {
+        els = []
+        board.emit('wipeEls')
       })
     })
 

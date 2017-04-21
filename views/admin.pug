@@ -2,8 +2,9 @@ doctype html
 html
   head
     title= "admin | " + board.title
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel="stylesheet" href="/css/src.bundle.css")
-  body
+  body(data-slug= board._id)
     h1= board.title
     h2 admin
     form#board_form(method="PUT" action= "/board/" + board._id)
@@ -41,4 +42,6 @@ html
         input#client_private(type="checkbox" checked= board.privacy.client)
       div.form-group
         input#board_submit(type="submit")
+    button#board_clear clear board
+    script(src="/js/commons.js")
     script(src="/js/admin.bundle.js")

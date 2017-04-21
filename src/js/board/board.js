@@ -1,10 +1,10 @@
 import io from 'socket.io-client'
 
-let main = document.getElementById("Board")
-let elCap = 75
-
 const slug = document.body.getAttribute("data-slug")
-console.log(`${slug} board`)
+const socket = io(`/${slug}`)
+
+let main = document.getElementById("Board")
+let elCap = 10
 
 const pasteEl = (html) => {
   let node = document.createElement('span');
@@ -21,10 +21,20 @@ const pasteEl = (html) => {
   }
 }
 
-const socket = io(`/${slug}`)
 socket.on('initEls', (data) => {
+  console.log("initting", data)
   data.forEach(d => {
     pasteEl(d)
+  })
+})
+
+socket.on('wipeEls', () => {
+  console.log("potty trainin")
+  Array.from(main.childNodes).forEach((el) => {
+    el.className += " glow-out"
+    setTimeout(() => {
+      main.removeChild(el)
+    }, 500);
   })
 })
 

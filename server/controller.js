@@ -16,7 +16,7 @@ module.exports = (io) => {
           }
           if (result) {
             if (!io.nsps[`/${result._id}`]) {
-              io.Namespace(result._id)
+              io.Namespace(result)
             }
             res.render('board', {board: result})
           }
@@ -36,7 +36,7 @@ module.exports = (io) => {
           }
           if (result) {
             if (!io.nsps[`/${result._id}`]) {
-              io.Namespace(result._id)
+              io.Namespace(result)
             }
             res.render('client', {board: result})
           }
@@ -81,6 +81,9 @@ module.exports = (io) => {
         .findOne({_id : req.params.id}, (err, result) => {
           if (err) {
             console.log("admin findOne err", err)
+          }
+          if (!io.nsps[`/${result._id}`]) {
+            io.Namespace(result)
           }
           res.render('admin', {board: result})
           // mdb.close()
@@ -159,7 +162,11 @@ module.exports = (io) => {
             }
           })
         })
-    }
+    },
+    // wipeBoard: (req, res) => {
+    //   var nsp = io.nsps[`/${req.params.id}`]
+    //   nsp.emit()
+    // }
   }
 
   return cntrl
