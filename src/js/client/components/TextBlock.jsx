@@ -8,6 +8,29 @@ class TextBlock extends Component {
 
     this.fontSizeMin = 12
 
+    this.fontFams = [
+      {
+        value: 'courier',
+        label: 'courier',
+      },
+      {
+        value: 'arial',
+        label: 'arial',
+      },
+      {
+        value: 'sans-serif',
+        label: 'times new roman',
+      },
+      {
+        value: '\"Comic Sans MS\", arial, /* Windows, MacOS */ helvetica, /* Unix+X, MacOS */ sans-serif',
+        label: 'comic sans',
+      },
+      {
+        value: '\"andale mono\", /* MS WebFont */ "monotype.com", /* MS WebFont, former name */ monaco, /* MacOS */ /* Fallback options */ "courier new", /* Windows, MacOS */ courier, /* Unix+X, MacOS */ monospace',
+        label: 'andale'
+      }
+    ]
+
     this.state = {
       color: "#000000",
       fontScale: 0.8,
@@ -61,6 +84,7 @@ class TextBlock extends Component {
     let sizeStyle = {
       color: this.state.color,
       fontSize: `${roundedFontSize}px`,
+      fontFamily: this.state.fontFam,
     }
 
     return(
@@ -68,9 +92,13 @@ class TextBlock extends Component {
         <input ref={(el) => this.txt = el} className="block" style={inputStyle} defaultValue="Type something" />
         <div className="inline-block">
           <select className="block" value={this.state.fontFam} onChange={this.updateFontFam}>
-            <option value="courier" style={{fontFamily: 'courier'}}>courier</option>
-            <option value="arial" style={{fontFamily: 'arial'}}>arial</option>
-            <option value="sans-serif" style={{fontFamily: 'sans-serif'}}>sans-serif</option>
+            {
+              this.fontFams.map((f) => {
+                return(
+                  <option value={f.value}>{f.label}</option>
+                )
+              })
+            }
           </select>
 
           <p style={sizeStyle}>{`${roundedFontSize}px`}</p>
