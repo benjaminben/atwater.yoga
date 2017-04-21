@@ -56,6 +56,9 @@ module.exports = (server) => {
     board.on('connection', (socket) => {
       console.log('%s board connected', slug)
       socket.emit('initEls', els)
+      socket.on('pop', (data) => {
+        els.shift()
+      })
       socket.on('disconnect', () => {
         checkConnections()
       })
