@@ -12,6 +12,7 @@ module.exports = (server) => {
     var client = io.of(`/${slug}/client`)
     var admin = io.of(`/${slug}/admin`)
     var els = (dbBoard.els && dbBoard.els.length) ? dbBoard.els : []
+    var discTO
 
     var deleteNsp = () => {
       board.removeAllListeners()
@@ -31,7 +32,9 @@ module.exports = (server) => {
       var adminCnts = Object.keys(admin.connected).length
 
       if (boardCnts === 0 && clientCnts === 0 && adminCnts === 0) {
-        mdb
+        discTO = setTimeout(() => {
+
+	mdb
           .db()
           .collection("boards")
           .update({_id: slug}, {$set: {els: els}}, (err, result) => {
@@ -42,10 +45,13 @@ module.exports = (server) => {
             console.log(`board els updated ${result} deleting nsp`)
             deleteNsp()
           })
+        
+	}, 3000)
       }
     }
 
     board.on('connection', (socket) => {
+      clearTimeout(discTO)
       console.log('%s board connected', slug)
       socket.on('disconnect', () => {
         console.log("%s board disconnect", slug)
@@ -58,6 +64,7 @@ module.exports = (server) => {
     })
 
     client.on('connection', (socket) => {
+      clearTimeout(discTO)
       console.log('%s client connected', slug)
       socket.on('disconnect', () => {
         console.log("%s client disconnect", slug)
@@ -70,6 +77,7 @@ module.exports = (server) => {
     })
 
     admin.on('connection', (socket) => {
+      clearTimeout(discTO)
       console.log('%s admin connected', slug)
       socket.on('disconnect', () => {
         console.log("%s admin disconnect", slug)
