@@ -3,6 +3,7 @@
   var reqs = document.querySelectorAll("#board_form input[required]")
   var submit = document.getElementById("board_submit")
   var slug = document.getElementById("board_id")
+  var slugErr = document.getElementById("board_id_error")
   var slugTimeout
 
   var formValidate = function(e) {
@@ -75,6 +76,18 @@
 
   slug.addEventListener("input", function() {
     window.clearTimeout(slugTimeout)
+    slug.className = ""
+    if (slug.value.length === 0) {
+      slugErr.textContent = ""
+      return
+    }
+    if (slug.value.search(/^[a-zA-Z0-9-_]+$/) === -1) {
+      slugErr.textContent = "id must only contain A-z, 1_0, etc."
+      return
+    }
+    else {
+      slugErr.textContent = ""
+    }
     slugTimeout = window.setTimeout(function() {
       console.log("fetching", slug.value)
       slug.className = "searching"
@@ -93,6 +106,7 @@
           if (res.result) {
             slug.className = "taken"
             slug.taken = true
+            slugErr.textContent = "id taken"
             return false
           }
           slug.className = "available"
