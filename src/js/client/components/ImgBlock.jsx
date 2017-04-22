@@ -13,11 +13,13 @@ class ImgBlock extends Component {
     let img = document.createElement("img")
     img.className = "el"
     img.src = src
-    img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
+
+    let widthVar = (Math.random() * 33).toFixed()
+    img.style.width = `${widthVar}vw`
     img.style.height = "auto"
 
-    img.style.top = `${(Math.random() * 100).toFixed()}%`
-    img.style.left = `${(Math.random() * 100).toFixed()}%`
+    img.style.top = `${(Math.random() * 80 - 10).toFixed()}%`
+    img.style.left = `${(Math.random() * (100 - widthVar)).toFixed()}%`
 
     if (filter) {
       let sepia = Math.round(Math.random() * 50)

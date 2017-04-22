@@ -59,8 +59,11 @@ class TextBlock extends Component {
     p.style.fontSize = `${(this.state.fontScale * this.fontSizeMin + this.fontSizeMin).toFixed()}px`
     p.style.fontFamily = this.state.fontFam
 
+    let widthVar = Math.random() * (30)
+    p.style.width = `${widthVar}%`
+
     p.style.top = `${(Math.random() * 100).toFixed()}%`
-    p.style.left = `${(Math.random() * 100).toFixed()}%`
+    p.style.left = `${(Math.random() * (100 - widthVar)).toFixed()}%`
     return p
   }
 
