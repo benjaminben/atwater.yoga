@@ -1,7 +1,11 @@
-.client-link {
+#client_link {
   position: absolute;
   bottom: 0;
+  padding: 0.66em;
   right: 0;
+  font-size: 1.33em;
+  font-weight: 700;
+  color: black;
 }
 
 #Board {
@@ -41,5 +45,11 @@
   to {
     opacity: 0;
     transform: translateY(-10%)
+  }
+}
+
+@media screen and (max-width: 400px) {
+  #client_link {
+    font-size: 6vw;
   }
 }
