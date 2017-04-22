@@ -51,14 +51,11 @@
     .dashboard {
       padding-bottom: 40px;
 
-      &.text {
-        .slider-pct {
-          width: 100%;
-        }
-
-        .color-picker {
-          margin-left: 60px;
-        }
+      .sext {
+        font-size: 1em;
+        padding: 0.66em;
+        box-sizing: border-box;
+        border: 1px solid rgba(0,0,0,0.1);
       }
     }
   }
@@ -68,6 +65,47 @@
 
     a {
       text-decoration: underline;
+    }
+  }
+}
+
+#TextBlock {
+  .sext {
+    margin-bottom: 2em;
+  }
+  .mod {
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
+  .submit {
+    margin: 2em auto 0;
+    font-size: 1em;
+    border: 1px solid rgba(0,0,0,0.5);
+    background: none;
+    padding: 0.66em;
+    margin-bottom: 1em;
+    border-radius: 4px;
+
+    &:active {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      outline: none;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+  .font {
+    select {
+      font-size: 1em;
+      border: 1px solid rgba(0,0,0,0.5);
+      padding: 0.33em;
+      margin-bottom: 1em;
+    }
+    .slider-pct {
+      width: 100%;
     }
   }
 }

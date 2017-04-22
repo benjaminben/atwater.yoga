@@ -6,26 +6,24 @@ class PctSlider extends Component {
 
     this.range = {start: 0, end: 100}
 
-    this.state = {
-      startX: null
-    }
-
     this.inputStart = this.inputStart.bind(this)
     this.inputUpdate = this.inputUpdate.bind(this)
     this.inputEnd = this.inputEnd.bind(this)
   }
 
   componentDidMount() {
-    this.circ.addEventListener("mousedown", this.inputStart)
-    this.circ.addEventListener("touchstart", this.inputStart)
+    this.slider.addEventListener("mousedown", this.inputStart)
+    this.slider.addEventListener("touchstart", this.inputStart)
   }
 
   inputStart(e) {
-    this.circ.removeEventListener("mousedown", this.inputStart)
-    this.circ.removeEventListener("touchstart", this.inputStart)
+    this.inputUpdate(e)
 
-    let startX = e.type === "touchstart" ? e.targetTouches[0].clientX : e.clientX
-    this.setState({startX: startX})
+    this.slider.removeEventListener("mousedown", this.inputStart)
+    this.slider.removeEventListener("touchstart", this.inputStart)
+
+    // let startX = e.type === "touchstart" ? e.targetTouches[0].clientX : e.clientX
+    // this.setState({startX: startX})
 
     window.addEventListener("mousemove", this.inputUpdate)
     window.addEventListener("touchmove", this.inputUpdate)
@@ -37,13 +35,12 @@ class PctSlider extends Component {
     let evt = (e.type === "touchmove" || e.type === "touchstart")
               ? e.targetTouches[0] : e
 
-    let delta = -(this.state.startX - evt.clientX)
+    let rect = this.slider.getBoundingClientRect()
+    let target = evt.clientX - rect.left
+    let ratio = (target / rect.width).toFixed(2)
 
-    if ((delta / 100 + this.props.pct) <= (this.range.end / 100) &&
-        (delta / 100 + this.props.pct) >= (this.range.start / 100)) {
-
-      this.setState({startX: evt.clientX})
-      this.props.action(delta / 100)
+    if (ratio >= 0 && ratio <= 1) {
+      this.props.action(ratio)
     }
   }
 
@@ -52,17 +49,19 @@ class PctSlider extends Component {
     window.removeEventListener("touchmove", this.inputUpdate)
     window.removeEventListener("mouseup", this.inputEnd)
     window.removeEventListener("touchend", this.inputEnd)
-    this.circ.addEventListener("mousedown", this.inputStart)
-    this.circ.addEventListener("touchstart", this.inputStart)
+    this.slider.addEventListener("mousedown", this.inputStart)
+    this.slider.addEventListener("touchstart", this.inputStart)
   }
 
   render() {
     return(
       <svg className="slider-pct" width={this.range.end + this.range.start} height="40" viewBox={`0 0 ${this.range.end + this.range.start} 20`}>
-        <line x1={this.range.start} x2={this.range.end} y1={10} y2={10} strokeWidth="4" stroke="black" />
-        <circle ref={(el) => this.circ = el}
-                cx={this.props.pct * this.range.end + this.range.start}
-                cy={10} r={8} strokeWidth="1" stroke="black" fill="white" />
+        <g ref={(el) => this.slider = el}>
+          <line x1={this.range.start} x2={this.range.end} y1={10} y2={10} strokeWidth="4" stroke="black" />
+          <circle ref={(el) => this.circ = el}
+                  cx={this.props.pct * (this.range.end + this.range.start)}
+                  cy={10} r={8} strokeWidth="1" stroke="black" fill="white" />
+        </g>
       </svg>
     )
   }

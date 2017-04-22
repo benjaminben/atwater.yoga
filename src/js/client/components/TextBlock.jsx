@@ -7,6 +7,8 @@ class TextBlock extends Component {
     super(props)
 
     this.fontSizeMin = 12
+    this.fontSizeMax = 24
+    this.fontSizeRange = this.fontSizeMax - this.fontSizeMin
 
     this.fontFams = [
       {
@@ -18,7 +20,7 @@ class TextBlock extends Component {
         label: 'arial',
       },
       {
-        value: 'sans-serif',
+        value: 'serif',
         label: 'times new roman',
       },
       {
@@ -64,7 +66,7 @@ class TextBlock extends Component {
 
   updateFontSize(d) {
     this.setState({
-      fontScale: this.state.fontScale + d
+      fontScale: d
     })
   }
 
@@ -73,7 +75,7 @@ class TextBlock extends Component {
   }
 
   render() {
-    let roundedFontSize = (this.state.fontScale * this.fontSizeMin +
+    let roundedFontSize = (this.state.fontScale * this.fontSizeRange +
                            this.fontSizeMin).toFixed()
 
     let inputStyle = {
@@ -88,9 +90,9 @@ class TextBlock extends Component {
     }
 
     return(
-      <div className={"text dashboard" + (this.props.open ? "" : " none")}>
-        <input ref={(el) => this.txt = el} className="block" style={inputStyle} defaultValue="Type something" />
-        <div className="inline-block">
+      <div id="TextBlock" className={"text text-center dashboard" + (this.props.open ? "" : " none")}>
+        <input ref={(el) => this.txt = el} className="block sext width100" style={inputStyle} placeholder="Type something" defaultValue="Type something" />
+        <div className="inline-block v-middle mod font">
           <select className="block" value={this.state.fontFam} onChange={this.updateFontFam}>
             {
               this.fontFams.map((f, i) => {
@@ -101,13 +103,13 @@ class TextBlock extends Component {
             }
           </select>
 
-          <p style={sizeStyle}>{`${roundedFontSize}px`}</p>
+          <p style={sizeStyle}>{sizeStyle.fontSize}</p>
           <PctSlider pct={this.state.fontScale} action={this.updateFontSize} />
         </div>
-        <div className="inline-block">
+        <div className="inline-block v-middle mod">
           <ColorPicker action={this.updateColor} />
         </div>
-        <button className="block" onClick={() => this.props.emit(this.conjureEl(this.txt.value))}>submit</button>
+        <button className="block submit" onClick={() => this.props.emit(this.conjureEl(this.txt.value))}>submit text</button>
       </div>
     )
   }

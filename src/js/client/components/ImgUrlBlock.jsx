@@ -72,7 +72,7 @@ class ImgUrlBlock extends Component {
           must be .jpg / .png / .gif
         </span>
         <input name="img_url"
-               className="block width100"
+               className="block sext width100"
                placeholder="paste url"
                onChange={this.handleInput} />
         {
