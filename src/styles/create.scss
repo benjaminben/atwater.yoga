@@ -1,3 +1,75 @@
+#CreateBoard {
+
+  padding: 40px 0;
+
+  header {
+    margin-bottom: 20px;
+
+    h1 {
+      font-size: 2.33em;
+    }
+    h2 {
+      font-size: 1.33em;
+    }
+  }
+
+  form {
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .required {
+    input {
+      width: 100%;
+      margin: 0.5em 0 0.25em;
+    }
+  }
+
+  .form-group {
+    padding: 0.33em 0;
+
+    input {
+      // width: 100%
+      padding: 0.66em;
+      box-sizing: border-box;
+      font-size: 1em;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    &.settings {
+      .title {
+        font-size: 1.33em;
+        font-weight: 700;
+        margin-bottom: 0.33em;
+      }
+
+      input[type="checkbox"] {
+        width: 2em;
+        height: 2em;
+        padding: 0;
+        margin-left: 0.66em;
+      }
+
+      .tick {
+        margin: 0 0.66em 0.66em 0;
+      }
+    }
+  }
+
+  .section-title {
+    padding: 0.66em 0 0.33em;
+    margin-bottom: 0.33em;
+    font-size: 1.33em;
+    border-bottom: 1px solid black;
+  }
+
+  .submit {
+    margin: 0 auto;
+  }
+
+}
+
 #board_form input {
   outline: none;
 }
