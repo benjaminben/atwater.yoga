@@ -46,9 +46,9 @@ module.exports = (server) => {
     }
 
     board.on('connection', (socket) => {
-      console.log('%s board connected', slug)
+      // console.log('%s board connected', slug)
       socket.on('disconnect', () => {
-        console.log("%s board disconnect", slug)
+        // console.log("%s board disconnect", slug)
         checkConnections()
       })
       socket.emit('initEls', els)
@@ -58,9 +58,9 @@ module.exports = (server) => {
     })
 
     client.on('connection', (socket) => {
-      console.log('%s client connected', slug)
+      // console.log('%s client connected', slug)
       socket.on('disconnect', () => {
-        console.log("%s client disconnect", slug)
+        // console.log("%s client disconnect", slug)
         checkConnections()
       })
       socket.on('el', (data) => {
@@ -70,9 +70,9 @@ module.exports = (server) => {
     })
 
     admin.on('connection', (socket) => {
-      console.log('%s admin connected', slug)
+      // console.log('%s admin connected', slug)
       socket.on('disconnect', () => {
-        console.log("%s admin disconnect", slug)
+        // console.log("%s admin disconnect", slug)
         checkConnections()
       })
       socket.on('wipe', (data) => {

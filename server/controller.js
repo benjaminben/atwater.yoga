@@ -35,7 +35,9 @@ module.exports = (io) => {
         .db()
         .collection('boards')
         // suppress fetching els for client (faster load)
-        .findOne({_id : req.params.id}, {admin: 0, els: 0}, (err, result) => {
+        // SIKE we can't surpress rn bc current method is
+        // causing overwrite of els with blank array :(...
+        .findOne({_id : req.params.id}, {admin: 0}, (err, result) => {
           if (err) {
             console.log("client findOne err", err)
           }
@@ -79,7 +81,7 @@ module.exports = (io) => {
       mdb
         .db()
         .collection('boards')
-        .findOne({_id : req.params.id}, {els: 0}, (err, result) => {
+        .findOne({_id : req.params.id}, {}, (err, result) => {
           if (err) {
             console.log("admin findOne err", err)
           }

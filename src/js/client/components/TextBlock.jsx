@@ -37,6 +37,7 @@ class TextBlock extends Component {
       color: "#000000",
       fontScale: 0.8,
       fontFam: "arial",
+      message: "",
     }
 
     this.updateColor = this.updateColor.bind(this)
@@ -112,7 +113,15 @@ class TextBlock extends Component {
         <div className="inline-block v-middle mod">
           <ColorPicker action={this.updateColor} />
         </div>
-        <button className="block pointer submit" onClick={() => this.props.emit(this.conjureEl(this.txt.value))}>submit text</button>
+        <button className="block pointer submit" onClick={
+          () => {
+              if (this.txt.value.length) {
+                this.props.emit(this.conjureEl(this.txt.value))
+              }
+            }
+          }>
+          submit text
+        </button>
       </div>
     )
   }
