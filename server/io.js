@@ -4,7 +4,7 @@ module.exports = (server) => {
   var io = require('socket.io')(server)
   io.yogas = {}
 
-  io.Namespace = (dbBoard) => {
+  io.Namespace = (dbBoard, callback) => {
     console.log("making space")
 
     var slug = dbBoard._id
@@ -48,7 +48,7 @@ module.exports = (server) => {
     board.on('connection', (socket) => {
       console.log('%s board connected', slug)
       socket.on('disconnect', () => {
-        // console.log("%s board disconnect", slug)
+        console.log("%s board disconnect", slug)
         checkConnections()
       })
       socket.emit('initEls', els)
@@ -60,7 +60,7 @@ module.exports = (server) => {
     client.on('connection', (socket) => {
       console.log('%s client connected', slug)
       socket.on('disconnect', () => {
-        // console.log("%s client disconnect", slug)
+        console.log("%s client disconnect", slug)
         checkConnections()
       })
       socket.on('el', (data) => {
@@ -72,7 +72,7 @@ module.exports = (server) => {
     admin.on('connection', (socket) => {
       console.log('%s admin connected', slug)
       socket.on('disconnect', () => {
-        // console.log("%s admin disconnect", slug)
+        console.log("%s admin disconnect", slug)
         checkConnections()
       })
       socket.on('wipe', (data) => {
@@ -81,6 +81,9 @@ module.exports = (server) => {
       })
     })
 
+    if (callback) {
+      callback()
+    }
     return({
       board: board,
       client: client,

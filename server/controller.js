@@ -16,9 +16,13 @@ module.exports = (io) => {
           }
           if (result) {
             if (!io.nsps[`/${result._id}`]) {
-              io.Namespace(result)
+              io.Namespace(result, () => {
+                res.render('board', {board: result})
+              })
             }
-            res.render('board', {board: result})
+            else {
+              res.render('board', {board: result})
+            }
           }
           else {
             res.redirect('/')
@@ -31,16 +35,19 @@ module.exports = (io) => {
         .db()
         .collection('boards')
         // suppress fetching els for client (faster load)
-        .findOne({_id : req.params.id}, {els: 0}, (err, result) => {
-          console.log("rez", result)
+        .findOne({_id : req.params.id}, {admin: 0, els: 0}, (err, result) => {
           if (err) {
             console.log("client findOne err", err)
           }
           if (result) {
             if (!io.nsps[`/${result._id}`]) {
-              io.Namespace(result)
+              io.Namespace(result, () => {
+                res.render('client', {board: result})
+              })
             }
-            res.render('client', {board: result})
+            else {
+              res.render('client', {board: result})
+            }
           }
           else {
             res.redirect('/')
@@ -77,9 +84,13 @@ module.exports = (io) => {
             console.log("admin findOne err", err)
           }
           if (!io.nsps[`/${result._id}`]) {
-            io.Namespace(result)
+            io.Namespace(result, () => {
+              res.render('admin', {board: result})
+            })
           }
-          res.render('admin', {board: result})
+          else {
+            res.render('admin', {board: result})
+          }
           // mdb.close()
         })
     },
