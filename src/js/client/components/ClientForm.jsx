@@ -6,16 +6,11 @@ class ClientForm extends Component {
   constructor(props) {
     super(props)
 
-    // this.conjureEl = this.conjureEl.bind(this)
     this.emitEl = this.emitEl.bind(this)
   }
 
-  // conjureEl() {
-
-  // }
-
   emitEl(el) {
-    console.log("emittens", el)
+    // console.log("emittens", el)
     this.props.socket.emit("el", el.outerHTML)
   }
 

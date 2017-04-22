@@ -9,7 +9,7 @@ class ClientBlock extends Component {
     super(props)
 
     this.state = {
-      open: true
+      open: false
     }
 
     this.toggleBlock = this.toggleBlock.bind(this)
