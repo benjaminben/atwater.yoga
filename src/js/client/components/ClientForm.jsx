@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ClientBlock from './ClientBlock.jsx'
+import RADHA from './RADHA.jsx'
 
 class ClientForm extends Component {
   constructor(props) {
@@ -47,6 +48,8 @@ class ClientForm extends Component {
           :
           null
         }
+
+        <RADHA />
 
         <div className="bug-link text-center">
           <a href="https://gitreports.com/issue/benjaminben/atwater.yoga"

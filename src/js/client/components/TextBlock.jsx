@@ -93,9 +93,9 @@ class TextBlock extends Component {
         <div className="inline-block">
           <select className="block" value={this.state.fontFam} onChange={this.updateFontFam}>
             {
-              this.fontFams.map((f) => {
+              this.fontFams.map((f, i) => {
                 return(
-                  <option value={f.value}>{f.label}</option>
+                  <option key={i} value={f.value}>{f.label}</option>
                 )
               })
             }

@@ -64,6 +64,8 @@
   }
 
   .bug-link {
+    padding: 30px 0;
+
     a {
       text-decoration: underline;
     }
@@ -95,5 +97,48 @@
     max-width: 300px;
     max-height: 300px;
     border: 1px solid black;
+  }
+}
+
+.RADHA {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+svg#RAD {
+  width: 100%;
+
+  .floaty-black {
+    animation: floatBlack 2.66s infinite alternate;
+    transform: translate(0%, 20%);
+  }
+  .floaty-black:nth-of-type(2n){
+    animation-delay: -0.66s;
+  }
+  .floaty-white {
+    animation: floatWhite 2.33s infinite alternate;
+    transform: translate(0%, 20%);
+  }
+  .floaty-white:nth-of-type(2n){
+    animation-delay: -0.33s;
+  }
+}
+
+
+@keyframes floatBlack {
+  0% {
+    transform: translate(0%, 20%);
+  }
+  100% {
+    transform: translate(0%, -20%);
+  }
+}
+@keyframes floatWhite {
+  0% {
+    transform: translate(0%, -20%);
+  }
+  100% {
+    transform: translate(0%, 20%);
   }
 }
