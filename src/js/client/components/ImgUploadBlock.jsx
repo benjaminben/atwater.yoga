@@ -15,21 +15,7 @@ class ImgUploadBlock extends Component {
     this.resifyImage = this.resifyImage.bind(this)
     this.getOrientation = this.getOrientation.bind(this)
     this.postToImgur = this.postToImgur.bind(this)
-    // this.conjureEl = this.conjureEl.bind(this)
   }
-
-  // conjureEl(src) {
-  //   let img = document.createElement("img")
-  //   img.className = "el"
-  //   img.src = src
-  //   img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
-  //   img.style.height = "auto"
-
-  //   img.style.top = `${(Math.random() * 100).toFixed()}%`
-  //   img.style.left = `${(Math.random() * 100).toFixed()}%`
-
-  //   return img
-  // }
 
   postToImgur() {
     let fd = new FormData()
@@ -189,11 +175,11 @@ class ImgUploadBlock extends Component {
         <input ref={(el) => this.stin = el}
                onChange={this.previewUpload}
                type="file" accept="image/*"
-               name="img_upload" className="block" />
+               name="img_upload" className="block file-picker" />
         {
           this.state.img_buff
           ?
-          <img className="block" src={this.state.img_buff} />
+          <img className="block buff" src={this.state.img_buff} />
           :
           null
         }
@@ -205,20 +191,17 @@ class ImgUploadBlock extends Component {
             // are we uploading the previewed image?
             this.state.uploading
             ?
-            <span>uploading...</span>
+            <span className="block text-center">uploading...</span>
             :
             (
               this.state.imgur_url
               ?
-              <div>
-                <label htmlFor="filter">filter:</label>
-                <input name="filter" type="checkbox" onChange={() => {
+              <div className="text-center">
+                <label className="inline-block v-middle" htmlFor="filter">#filter:</label>
+                <input className="inline-block v-middle" name="filter" type="checkbox" onChange={() => {
                   this.setState({filter: !this.state.filter})
                 }} />
-                <button className="block"
-                        style={{
-                          background: "green"
-                        }}
+                <button className="block submit"
                         onClick={
                           () =>
                             this.props.emit(
@@ -232,10 +215,7 @@ class ImgUploadBlock extends Component {
                 </button>
               </div>
               :
-              <button className="block"
-                      style={{
-                        background: "pink"
-                      }}
+              <button className="block submit"
                       onClick={this.postToImgur}>
                 generate url
               </button>

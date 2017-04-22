@@ -48,22 +48,24 @@ class DoodleBlock extends Component {
   render() {
     return(
       <div id="DoodleBlock"
-           className={"dashboard" + (this.props.open ? "" : " none")}>
-        <div className="inline-block">
-          <DoodleBox color={this.state.color} action={this.updateDataUrl} />
-        </div>
-        <div className="inline-block">
-          <h1 style={{color: this.state.color}}>pick color</h1>
-          <ColorPicker action={this.updateColor} />
+           className={"dashboard text-center" + (this.props.open ? "" : " none")}>
+        <div className="mods">
+          <div className="inline-block v-middle mod">
+            <DoodleBox color={this.state.color} action={this.updateDataUrl} />
+          </div>
+          <div className="inline-block v-middle mod color">
+            <h1 className="text-center" style={{color: this.state.color}}>ink color</h1>
+            <ColorPicker action={this.updateColor} />
+          </div>
         </div>
         {
           this.state.dataUrl
           ?
-          <button className="block"
+          <button className="block submit"
                   onClick={
                     () => this.props.emit(this.conjureEl(this.state.dataUrl))
                   }>
-            submit
+            submit doodle
           </button>
           :
           null

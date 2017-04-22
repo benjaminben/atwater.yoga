@@ -109,7 +109,7 @@ class TextBlock extends Component {
         <div className="inline-block v-middle mod">
           <ColorPicker action={this.updateColor} />
         </div>
-        <button className="block submit" onClick={() => this.props.emit(this.conjureEl(this.txt.value))}>submit text</button>
+        <button className="block pointer submit" onClick={() => this.props.emit(this.conjureEl(this.txt.value))}>submit text</button>
       </div>
     )
   }

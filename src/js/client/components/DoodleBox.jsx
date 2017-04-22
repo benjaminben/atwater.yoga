@@ -66,7 +66,7 @@ class DoodleBox extends Component {
     this.context.strokeStyle = this.props.color
     this.context.lineJoin = "round"
     this.context.lineCap = "round"
-    this.context.lineWidth = 5
+    this.context.lineWidth = 4
 
     this.context.beginPath()
 
@@ -81,15 +81,16 @@ class DoodleBox extends Component {
 
   clear() {
     this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height)
+    this.props.action(null)
   }
 
   render() {
     return(
       <div className="doodle-box">
         <canvas className="doodle-box"
-                width="300px" height="300px"
+                width="250px" height="250px"
                 ref={(el) => this.map = el}></canvas>
-        <button className="block" onClick={this.clear}>clear</button>
+        <button className="block clear" onClick={this.clear}>clear</button>
       </div>
     )
   }

@@ -10,24 +10,12 @@ class ImgUrlBlock extends Component {
       url: null,
       err: null,
       filter: false,
+      showHelp: false,
     }
 
     this.handleInput = this.handleInput.bind(this)
-    // this.conjureEl = this.conjureEl.bind(this)
+    this.toggleHelp = this.toggleHelp.bind(this)
   }
-
-  // conjureEl(src) {
-  //   let img = document.createElement("img")
-  //   img.className = "el"
-  //   img.src = src
-  //   img.style.width = `${(Math.random() * 25 + 5).toFixed()}vw`
-  //   img.style.height = "auto"
-
-  //   img.style.top = `${(Math.random() * 100).toFixed()}%`
-  //   img.style.left = `${(Math.random() * 100).toFixed()}%`
-
-  //   return img
-  // }
 
   handleInput(e) {
     this.setState({err: null})
@@ -57,8 +45,12 @@ class ImgUrlBlock extends Component {
         })
       }, 1000)
     }
+  }
 
-
+  toggleHelp() {
+    this.setState({
+      showHelp: !this.state.showHelp
+    })
   }
 
   render() {
@@ -82,6 +74,26 @@ class ImgUrlBlock extends Component {
           :
           null
         }
+        <div className="help">
+          {
+            this.state.showHelp
+            ?
+            <p>
+              {
+                `okay so the best approach is probably to google image
+                 search thing you're looking for, select an image and
+                 then choose "view original image" or "open in a new
+                 tab" or whatever your browser calls it, and then copy
+                 the url from the new window and paste it above. make
+                 sure the url ends with the file extension (e.g. .jpg)`
+               }
+               <br/><br/>
+               <span onClick={this.toggleHelp}>GOT IT 👍</span>
+            </p>
+            :
+            <p onClick={this.toggleHelp}>HELP 🤔</p>
+          }
+        </div>
         {
           this.state.url
           ?
