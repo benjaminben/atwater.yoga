@@ -135,10 +135,6 @@
   .help {
     margin-top: 1em;
   }
-
-  img {
-    max-width: 100%;
-  }
 }
 
 #ImgUploadBlock {
@@ -149,12 +145,13 @@
     display: block;
     border: 1px solid rgba(0,0,0,0.1);
   }
+}
+
+#ImgUrlBlock,
+#ImgUploadBlock {
   img {
     max-width: 100%;
-
-    &.buff {
-      margin: 1em auto;
-    }
+    margin: 1em auto;
   }
   input[name="filter"] {
     width: 2em;

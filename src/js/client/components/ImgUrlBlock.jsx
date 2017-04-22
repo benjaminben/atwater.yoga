@@ -81,7 +81,7 @@ class ImgUrlBlock extends Component {
             <p>
               {
                 `okay so the best approach is probably to google image
-                 search thing you're looking for, select an image and
+                 search the thing you're looking for, select an image and
                  then choose "view original image" or "open in a new
                  tab" or whatever your browser calls it, and then copy
                  the url from the new window and paste it above. make
@@ -97,14 +97,14 @@ class ImgUrlBlock extends Component {
         {
           this.state.url
           ?
-          <div>
+          <div className="text-center">
             <img src={this.state.url} />
-            <label htmlFor="filter">filter:</label>
-            <input name="filter" type="checkbox"
+            <label className="inline-block v-middle" htmlFor="filter">#filter:</label>
+            <input className="inline-block v-middle" name="filter" type="checkbox"
                    onChange={() => {
                      this.setState({filter: !this.state.filter})
                    }} />
-            <button className="block"
+            <button className="block submit"
                     onClick={
                       () => this.props.emit(this.props.conjureEl(this.state.url, this.state.filter))}>
               submit
