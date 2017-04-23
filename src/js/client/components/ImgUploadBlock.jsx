@@ -211,7 +211,7 @@ class ImgUploadBlock extends Component {
                               )
                             )
                         }>
-                  submit
+                  submit img
                 </button>
               </div>
               :

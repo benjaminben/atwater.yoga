@@ -98,7 +98,7 @@ class ImgUrlBlock extends Component {
           this.state.url
           ?
           <div className="text-center">
-            <img src={this.state.url} />
+            <img className="block" src={this.state.url} />
             <label className="inline-block v-middle" htmlFor="filter">#filter:</label>
             <input className="inline-block v-middle" name="filter" type="checkbox"
                    onChange={() => {
@@ -107,7 +107,7 @@ class ImgUrlBlock extends Component {
             <button className="block submit"
                     onClick={
                       () => this.props.emit(this.props.conjureEl(this.state.url, this.state.filter))}>
-              submit
+              submit img
             </button>
           </div>
           :
