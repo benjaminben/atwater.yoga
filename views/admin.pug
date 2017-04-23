@@ -7,6 +7,12 @@ html
   body(data-slug= board._id)
     h1= board.title
     h2 admin
+    div#board_bg_admin
+      p change the background change the world
+      input.youtube.inline-block(type="text", placeholder="youtube id")
+      button.youtube.inline-block submit yt
+      input.color.inline-block(type="text", placeholder="hex (e.g. #a0d5f9)")
+      button.color.inline-block submit hex
     form#board_form(method="PUT" action= "/board/" + board._id)
       h2 BOARD SETTINGS
       div.form-group

@@ -33,20 +33,18 @@ module.exports = (server) => {
 
       if (boardCnts === 0 && clientCnts === 0 && adminCnts === 0) {
         discTO = setTimeout(() => {
-
-	mdb
-          .db()
-          .collection("boards")
-          .update({_id: slug}, {$set: {els: els}}, (err, result) => {
-            if (err) {
-              console.log("board update err", err)
-              return
-            }
-            console.log(`board els updated ${result} deleting nsp`)
-            deleteNsp()
-          })
-        
-	}, 3000)
+        	mdb
+            .db()
+            .collection("boards")
+            .update({_id: slug}, {$set: {els: els}}, (err, result) => {
+              if (err) {
+                console.log("board update err", err)
+                return
+              }
+              console.log(`board els updated ${result} deleting nsp`)
+              deleteNsp()
+            })
+	      }, 3000)
       }
     }
 
@@ -82,6 +80,9 @@ module.exports = (server) => {
       socket.on('disconnect', () => {
         console.log("%s admin disconnect", slug)
         checkConnections()
+      })
+      socket.on('bg', (data) => {
+        board.emit('bg', data)
       })
       socket.on('wipe', (data) => {
         els = []

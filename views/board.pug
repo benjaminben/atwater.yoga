@@ -4,8 +4,10 @@ html
     title= board.title + " | @yoga"
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel="stylesheet" href="/css/src.bundle.css")
+    //- script(type="text/javascript" id="www-widgetapi-script" src="https://s.ytimg.com/yts/jsbin/www-widgetapi-vfltcC7GW/www-widgetapi.js" async="")
     //- script(src="https://cdn.socket.io/socket.io-1.4.5.js")
   body(data-slug= board._id)
+    #board_bg.absolute.width100.height100
     #Board
     a#client_link(href="/"+board._id+"/party")= "atwater.yoga/"+board._id+"/party"
     script(src="/js/commons.js")

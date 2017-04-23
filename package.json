@@ -20,7 +20,8 @@
     "react-dom": "^15.5.3",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^2.0.3",
+    "youtube-iframe": "^1.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
