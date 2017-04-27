@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title= board.title + " | @yoga"
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel="stylesheet" href="/css/src.bundle.css")
+  body
+    #YogaIndex.text-center
+      h1 Welcome to #[span.inline-block= board.title + "!"]
+      h2 Choose your path:
+
+      a.block(href= board._id + "/view") view board
+      a.block(href= board._id + "/remote") view remote
+      a.block(href= board._id + "/admin") view admin

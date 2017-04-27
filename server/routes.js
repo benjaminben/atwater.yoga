@@ -8,10 +8,16 @@ module.exports.initialize = (app, router, io) => {
   });
 
   router.get('/', controlla.showCreate)
-  router.get('/:id', controlla.showBoard)
+  router.get('/:id', controlla.showIndex)
+  router.get('/:id/view', controlla.showBoard)
   router.get('/:id/admin', controlla.showAdmin)
   router.get('/:id/admin/auth', controlla.showAuthAdmin)
-  router.get('/:id/party', controlla.showClient)
+  router.get('/:id/remote', controlla.showClient)
+
+  // fallback if crayfish
+  router.get('/:id/*', (req, res) => {
+    res.redirect(`/${req.params.id}`)
+  })
 
   router.get('/board/:id', controlla.findBoard)
   router.post('/board', controlla.postBoard)

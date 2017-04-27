@@ -1,0 +1,25 @@
+#YogaIndex {
+  padding-top: 60px;
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.33em;
+    font-weight: 400;
+    margin: 1.33em 0 1.33em;
+  }
+
+  a {
+    margin: 1em auto;
+    padding: 0.66em 1em;
+    border: 1px solid black;
+    width: 120px;
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(0,0,0,0.2)
+    }
+  }
+}

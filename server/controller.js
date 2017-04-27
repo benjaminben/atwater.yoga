@@ -6,6 +6,32 @@ module.exports = (io) => {
     showCreate: (req, res) => {
       res.render('create', {message: "hi pug"})
     },
+    showIndex: (req, res) => {
+      console.log(req.query)
+
+      mdb
+        .db()
+        .collection('boards')
+        .findOne({_id : req.params.id}, {els: 0, features: 0}, (err, result) => {
+          if (err) {
+            console.log("board findOne err", err)
+          }
+          if (result) {
+            if (!io.nsps[`/${result._id}`]) {
+              io.Namespace(result, () => {
+                res.render('index', {board: result})
+              })
+            }
+            else {
+              res.render('index', {board: result})
+            }
+          }
+          else {
+            res.redirect('/')
+          }
+          // mdb.close()
+        })
+    },
     showBoard: (req, res) => {
       mdb
         .db()
@@ -58,7 +84,6 @@ module.exports = (io) => {
         })
     },
     showAdmin: (req, res) => {
-      // console.log(req.cookies["yogaAdmin"])
       if (req.cookies["yogaAdmin"]) {
         var adminArray = JSON.parse(req.cookies["yogaAdmin"])
         if (adminArray.indexOf(req.params.id) > -1) {
