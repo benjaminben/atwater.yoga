@@ -14,7 +14,7 @@ class ImgBlock extends Component {
     img.className = "el"
     img.src = src
 
-    let widthVar = (Math.random() * 33).toFixed()
+    let widthVar = (Math.random() * 25).toFixed()
     img.style.width = `${widthVar}vw`
     img.style.height = "auto"
 
@@ -28,7 +28,6 @@ class ImgBlock extends Component {
       let leFilt = `sepia(${sepia}%) saturate(${saturate}%) contrast(${contrast}%)`
 
       img.style.filter = leFilt
-      console.log(img, leFilt)
     }
 
 

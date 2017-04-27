@@ -35,7 +35,7 @@ class DoodleBlock extends Component {
     img.src = dataUrl
     img.className = "el"
 
-    let widthVar = (Math.random() * 33).toFixed()
+    let widthVar = (Math.random() * 30).toFixed()
     img.style.width = `${widthVar}vw`
     img.style.height = "auto"
 
