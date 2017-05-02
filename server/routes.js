@@ -14,15 +14,15 @@ module.exports.initialize = (app, router, io) => {
   router.get('/:id/admin/auth', controlla.showAuthAdmin)
   router.get('/:id/remote', controlla.showClient)
 
-  // fallback if crayfish
-  router.get('/:id/*', (req, res) => {
-    res.redirect(`/${req.params.id}`)
-  })
-
   router.get('/board/:id', controlla.findBoard)
   router.post('/board', controlla.postBoard)
 
   router.post('/:id/admin/auth', controlla.authAdmin)
+
+  // fallback if crayfish
+  router.get('/:id/*', (req, res) => {
+    res.redirect(`/${req.params.id}`)
+  })
 
   // router.get('/:id/admin/wipe', controlla.wipeBoard)
 
