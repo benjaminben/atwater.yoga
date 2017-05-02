@@ -7,7 +7,7 @@ class TextBlock extends Component {
     super(props)
 
     this.fontSizeMin = 12
-    this.fontSizeMax = 24
+    this.fontSizeMax = 36
     this.fontSizeRange = this.fontSizeMax - this.fontSizeMin
 
     this.fontFams = [
@@ -35,7 +35,7 @@ class TextBlock extends Component {
 
     this.state = {
       color: "#000000",
-      fontScale: 0.8,
+      fontScale: 0.5,
       fontFam: "arial",
       message: "",
     }
