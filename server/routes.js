@@ -20,9 +20,9 @@ module.exports.initialize = (app, router, io) => {
   router.post('/:id/admin/auth', controlla.authAdmin)
 
   // fallback if crayfish
-  // router.get('/:id/*', (req, res) => {
-  //   res.redirect(`/${req.params.id}`)
-  // })
+  router.get('/:id/*', (req, res) => {
+    res.redirect(`/${req.params.id}`)
+  })
 
   // router.get('/:id/admin/wipe', controlla.wipeBoard)
 
