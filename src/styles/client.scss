@@ -222,17 +222,18 @@
 
 svg#RAD {
   width: 100%;
+  overflow: visible;
 
   .floaty-black {
     animation: floatBlack 2.66s infinite alternate;
-    transform: translate(0%, 20%);
+    transform: translate(0%, 5px);
   }
   .floaty-black:nth-of-type(2n){
     animation-delay: -0.66s;
   }
   .floaty-white {
     animation: floatWhite 2.33s infinite alternate;
-    transform: translate(0%, 20%);
+    transform: translate(0%, 5px);
   }
   .floaty-white:nth-of-type(2n){
     animation-delay: -0.33s;
@@ -242,17 +243,17 @@ svg#RAD {
 
 @keyframes floatBlack {
   0% {
-    transform: translate(0%, 20%);
+    transform: translate(0%, 5px);
   }
   100% {
-    transform: translate(0%, -20%);
+    transform: translate(0%, -5px);
   }
 }
 @keyframes floatWhite {
   0% {
-    transform: translate(0%, -20%);
+    transform: translate(0%, -5px);
   }
   100% {
-    transform: translate(0%, 20%);
+    transform: translate(0%, 5px);
   }
 }
