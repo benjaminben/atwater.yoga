@@ -9,6 +9,14 @@ html
       h1 Welcome to #[span.inline-block= board.title + "!"]
       h2 Choose your path:
 
-      a.block(href= board._id + "/view") view board
-      a.block(href= board._id + "/remote") view remote
-      a.block(href= board._id + "/admin") view admin
+      div.links
+        span.link.block
+          a(href= board._id + "/view") view board
+          if board._id == "demo"
+            p.sub open this in/on one window/device
+        span.link.block
+          a(href= board._id + "/remote") view remote
+          if board._id == "demo"
+            p.sub open this in/on another window/device
+        span.link.block
+          a(href= board._id + "/admin") view admin

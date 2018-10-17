@@ -9,8 +9,9 @@ html
     script(src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js")
   body
     #CreateBoard
-      header
-        h1.text-center atwater yoga
+      header.text-center
+        h1 atwater yoga
+        a(href="/demo") Demo
       form#board_form(method="POST" action="/board")
         h2.section-title CREATE BOARD
         div.required
@@ -55,5 +56,3 @@ html
           input#board_submit.block.submit(type="submit", disabled)
     script(src="/js/commons.js")
     script(src="/js/create.bundle.js")
-
-
