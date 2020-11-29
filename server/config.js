@@ -6,7 +6,7 @@ const fs      = require('fs')
 
 module.exports = (app) => {
   app.set('port', process.env.PORT || 8080)
-  app.use(express.static(__dirname + '/../public'))
+  app.use(express.static('public'))
   app.use(cp())
   app.use(bp.json())
   app.use(bp.urlencoded({ extended: true }))
