@@ -1,4 +1,4 @@
-const bc  = require('bcrypt-nodejs')
+const bc  = require('bcrypt')
 const mdb = require('./mongo_client')
 
 module.exports = (io) => {
@@ -136,7 +136,8 @@ module.exports = (io) => {
     },
     postBoard: (req, res) => {
       var board = req.body
-      var hash = bc.hashSync(req.body.admin.password)
+      var salt = bc.genSaltSync(10);
+      var hash = bc.hashSync(req.body.admin.password, salt)
 
       board.admin.password = hash
 
@@ -146,6 +147,8 @@ module.exports = (io) => {
         .insertOne(board, (err, insert) => {
           if (err) {
             console.log("board insertion err", err)
+            res.status(500).send(err)
+            return
           }
           res.status(200).json(insert.ops[0])
           // mdb.close()
@@ -170,10 +173,8 @@ module.exports = (io) => {
           }
 
           bc.compare(req.body.user.password, result.admin.password , (err, check) => {
-            // console.log(result._id)
             if (check) {
               if (req.cookies["yogaAdmin"]) {
-                console.log
                 var adminArray = JSON.parse(req.cookies["yogaAdmin"])
                 adminArray.push(result._id)
                 adminArray = JSON.stringify(adminArray)

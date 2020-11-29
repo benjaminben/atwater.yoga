@@ -1,18 +1,18 @@
 (function(){
   var client = require('mongodb').MongoClient,
-      mongodb;
-
+      mongodb,
+      db;
       module.exports = {
         connect: function(creds, callback) {
-          var dburl = `mongodb://${creds.user}:${creds.pw}@ds155080.mlab.com:55080/atwateryoga`;
+          var dburl = `mongodb+srv://${creds.user}:${creds.pw}@atwateryoga.ehm1w.mongodb.net/atwateryoga?retryWrites=true&w=majority`;
           client.connect(dburl,
-            function(err, db){
-              mongodb = db;
+            function(err, client){
+              db = client.db('atwateryoga');
               if(callback) { callback(); }
             });
          },
         db: function() {
-          return mongodb;
+          return db;
         },
         close: function() {
           mongodb.close();
